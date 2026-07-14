@@ -22,7 +22,7 @@
 <div id="mem" class="modal hide"><div class="card" style="width:min(720px,100%)"><h3>Add Calendar Entry</h3><div class="manual-event-form"><div class="field"><label>TYPE</label><select id="met"><option>To-do</option><option>Training</option></select></div><div class="field"><label>TITLE</label><input id="meti" placeholder="Enter title"></div><div class="field"><label>DATE</label><input id="med" type="date"></div><div class="field"><label>START TIME</label><input id="mes" type="time"></div><div class="field"><label>END TIME</label><input id="mee" type="time"></div><div class="field"><label>ASSIGNED AGENT</label><select id="mea"></select></div><div class="field span3"><label>NOTES / LOCATION</label><textarea id="men"></textarea></div></div><button class="btn pri" onclick="saveManualEvent()">Save Entry</button> <button class="btn sec" onclick="closeM('mem')">Cancel</button></div></div>
 <div id="aum" class="modal hide"><div class="card" style="width:min(650px,100%)"><h3>Add Account</h3><div class="form"><div class="field"><label>FULL NAME</label><input id="an"></div><div class="field"><label>USERNAME</label><input id="au"></div><div class="field"><label>PASSWORD</label><input id="ap" type="password"></div><div class="field"><label>EMAIL</label><input id="ae2" type="email"></div><div class="field"><label>MOBILE</label><input id="amo"></div><div class="field"><label>ROLE</label><select id="ar"><option>Agent</option><option>Admin</option></select></div></div><button class="btn pri" onclick="saveAgent()">Save</button> <button class="btn sec" onclick="closeM('aum')">Cancel</button></div></div>
 <script>
-const ST=['Approach','Setting Appointment','Done Client Meeting','For Closing','Closed','COI'],SO=['Facebook','TikTok','Instagram','Referral','Existing Client','Organic','Walk-in','Event','Other'];let S={u:[],p:[],g:[],c:[],h:[],me:null,ch:{},calendar:null,calVisible:new Set()};const K={u:'jp_u',p:'jp_p',g:'jp_g',c:'jp_c',h:'jp_h',s:'jp_s',url:'jp_url'};function id(x){return x+'-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,6)}function load(){S.u=JSON.parse(localStorage.getItem(K.u)||'[]');for(let k of ['p','g','c','h'])S[k]=JSON.parse(localStorage.getItem(K[k])||'[]');save()}function save(){for(let k of ['u','p','g','c','h'])localStorage.setItem(K[k],JSON.stringify(S[k]))}function money(n){return new Intl.NumberFormat('en-PH',{style:'currency',currency:'PHP',maximumFractionDigits:0}).format(+n||0)}function adm(){return S.me?.role==='Admin'}function nowMY(){let d=new Date;return[m=d.getMonth()+1,y=d.getFullYear()]}function createAdmin(){let name=sun.value.trim(),user=suu.value.trim().toLowerCase();if(!name||!user||!sup.value)return sn.innerHTML='<p class="neg">Complete full name, username, and password.</p>';if(sup.value!==suc.value)return sn.innerHTML='<p class="neg">Passwords do not match.</p>';if(sup.value.length<6)return sn.innerHTML='<p class="neg">Password must be at least 6 characters.</p>';S.u=[{id:id('U'),name,username:user,pass:sup.value,email:sue.value,mobile:sum.value,role:'Admin',status:'Active'}];save();setup.classList.add('hide');login.classList.remove('hide');lu.value=user}
+const ST=['Approach','Setting Appointment','Done Client Meeting','For Closing','Closed','COI'],SO=['Facebook','TikTok','Instagram','Referral','Existing Client','Organic','Walk-in','Event','Other'];let S={u:[],p:[],g:[],c:[],h:[],me:null,ch:{},calendar:null,calVisible:new Set()};const K={u:'jp_u',p:'jp_p',g:'jp_g',c:'jp_c',h:'jp_h',s:'jp_s',url:'jp_url',brand:'jp_brand',token:'jp_token'};function id(x){return x+'-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,6)}function load(){S.u=JSON.parse(localStorage.getItem(K.u)||'[]');for(let k of ['p','g','c','h'])S[k]=JSON.parse(localStorage.getItem(K[k])||'[]');save()}function save(){for(let k of ['u','p','g','c','h'])localStorage.setItem(K[k],JSON.stringify(S[k]))}function money(n){return new Intl.NumberFormat('en-PH',{style:'currency',currency:'PHP',maximumFractionDigits:0}).format(+n||0)}function adm(){return S.me?.role==='Admin'}function nowMY(){let d=new Date;return[m=d.getMonth()+1,y=d.getFullYear()]}function createAdmin(){let name=sun.value.trim(),user=suu.value.trim().toLowerCase();if(!name||!user||!sup.value)return sn.innerHTML='<p class="neg">Complete full name, username, and password.</p>';if(sup.value!==suc.value)return sn.innerHTML='<p class="neg">Passwords do not match.</p>';if(sup.value.length<6)return sn.innerHTML='<p class="neg">Password must be at least 6 characters.</p>';S.u=[{id:id('U'),name,username:user,pass:sup.value,email:sue.value,mobile:sum.value,role:'Admin',status:'Active'}];save();setup.classList.add('hide');login.classList.remove('hide');lu.value=user}
 function doLogin(){let x=S.u.find(x=>(x.username||'').toLowerCase()===lu.value.trim().toLowerCase()&&x.pass===lp.value&&x.status==='Active');if(!x)return ln.innerHTML='<p class="neg">Incorrect username, password, or inactive account.</p>';S.me=x;localStorage.setItem(K.s,x.id);show()}
 function show(){login.classList.add('hide');app.classList.remove('hide');who.textContent=S.me.name;role.textContent=S.me.role;setnav.classList.toggle('hide',!adm());init();render()}document.querySelectorAll('.nav button[data-p]').forEach(b=>b.onclick=()=>{document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('on'));b.classList.add('on');document.querySelectorAll('.panel').forEach(x=>x.classList.remove('on'));document.getElementById(b.dataset.p).classList.add('on');title.textContent=b.textContent;if(b.dataset.p==='ana')charts();if(b.dataset.p==='set')renderAgents()});function init(){let d=new Date;fm.innerHTML='<option value="0">All Months</option>'+Array.from({length:12},(_,i)=>`<option value="${i+1}" ${i===d.getMonth()?'selected':''}>${new Date(2000,i).toLocaleString('en',{month:'long'})}</option>`).join('');fy.innerHTML='<option value="0">All Years</option>'+Array.from({length:5},(_,i)=>`<option ${d.getFullYear()-i===d.getFullYear()?'selected':''}>${d.getFullYear()-i}</option>`).join('');fst.innerHTML='<option value="">All Status</option>'+ST.map(x=>`<option>${x}</option>`).join('');fso.innerHTML='<option value="">All Sources</option>'+SO.map(x=>`<option>${x}</option>`).join('');fa.innerHTML=adm()?'<option value="ALL">All Agents</option>'+S.u.filter(x=>x.role==='Agent').map(x=>`<option value="${x.id}">${x.name}</option>`).join(''):`<option value="${S.me.id}">${S.me.name}</option>`;ps.innerHTML=SO.map(x=>`<option>${x}</option>`).join('');pst.innerHTML=ST.map(x=>`<option>${x}</option>`).join('');[fs,fm,fy,fa,fst,fso].forEach(x=>x.oninput=renderProspects)}function mine(){return S.p.filter(x=>adm()||x.agentId===S.me.id)}function filtered(){let a=mine(),q=fs.value.toLowerCase(),m=+fm.value,y=+fy.value;if(q)a=a.filter(x=>x.name.toLowerCase().includes(q));if(m)a=a.filter(x=>new Date(x.dateAdded).getMonth()+1===m);if(y)a=a.filter(x=>new Date(x.dateAdded).getFullYear()===y);if(fa.value&&fa.value!=='ALL')a=a.filter(x=>x.agentId===fa.value);if(fst.value)a=a.filter(x=>x.status===fst.value);if(fso.value)a=a.filter(x=>x.source===fso.value);return a}function goalObj(){let d=new Date;return S.g.find(x=>x.agentId===S.me.id&&x.m===d.getMonth()+1&&x.y===d.getFullYear())||{goal:0,ratio:0,basis:'Manual Closing Ratio'}}function saveGoal(){let d=new Date,g=S.g.find(x=>x.agentId===S.me.id&&x.m===d.getMonth()+1&&x.y===d.getFullYear());if(!g){g={id:id('G'),agentId:S.me.id,m:d.getMonth()+1,y:d.getFullYear()};S.g.push(g)}g.goal=+goal.value||0;g.ratio=+ratio.value||0;g.basis=basis.value;save();renderDash()}function renderDash(){let d=new Date,a=mine().filter(x=>new Date(x.dateAdded).getMonth()===d.getMonth()&&new Date(x.dateAdded).getFullYear()===d.getFullYear()),g=goalObj();goal.value=g.goal;ratio.value=g.ratio;basis.value=g.basis;let closed=a.filter(x=>x.status==='Closed'),done=a.filter(x=>['Done Client Meeting','For Closing','Closed'].includes(x.status)),ape=closed.reduce((s,x)=>s+(+x.finalApe||+x.ape||0),0),gap=ape-g.goal,cr=done.length?closed.length/done.length*100:0,pipe=a.filter(x=>['Approach','Setting Appointment','Done Client Meeting','For Closing'].includes(x.status)).reduce((s,x)=>s+(+x.ape||0),0),r=(g.ratio||cr)/100,pt=r?g.goal/r:0,pg=pipe-pt;let c=[['Goal',money(g.goal),''],['Current APE',money(ape),''],['APE Goal Gap',money(gap),gap>=0?'pos':'neg'],['Closing Ratio',cr.toFixed(1)+'%',''],['Pipeline APE',money(pipe),''],['Pipeline Target',pt?money(pt):'N/A',''],['Pipeline Gap',money(pg),pg>=0?'pos':'neg']];kpis.innerHTML=c.map(x=>`<div class="kpi"><small>${x[0]}</small><b class="${x[2]}">${x[1]}</b></div>`).join('');status.innerHTML=ST.concat('Total').map(s=>`<div class="card" onclick="fstat('${s}')"><b>${s==='Total'?a.length:a.filter(x=>x.status===s).length}</b><small>${s}</small></div>`).join('')}function fstat(s){document.querySelector('[data-p="pros"]').click();fst.value=s==='Total'?'':s;renderProspects()}function rel(t){if(!t)return'No approach yet';let sec=(Date.now()-new Date(t))/1000,U=[['year',31536000],['month',2592000],['week',604800],['day',86400],['hour',3600],['minute',60]];if(sec<60)return'Just now';for(let[u,v]of U)if(sec>=v){let n=Math.floor(sec/v);return n+' '+u+(n>1?'s':'')+' ago'}}function renderProspects(){let show=adm()&&fa.value==='ALL';th.innerHTML=(show?['Agent']:[]).concat(['Client / Approach','Status','Occupation','Plan','APE','Source','Mobile','Remarks','Actions']).map(x=>`<th>${x}</th>`).join('');tb.innerHTML=filtered().map(x=>`<tr>${show?`<td>${x.agentName}</td>`:''}<td><b>${x.name}</b><div class="quick"><button onclick="approach('${x.id}','chat')">💬</button><button onclick="approach('${x.id}','email')">✉️</button><b>${x.count||0}</b></div><div class="muted">${rel(x.last)}</div></td><td><select onchange="statusChange('${x.id}',this.value)">${ST.map(s=>`<option ${s===x.status?'selected':''}>${s}</option>`).join('')}</select></td><td>${x.occ||'-'}</td><td>${x.plan||'-'}</td><td>${money(x.status==='Closed'?(x.finalApe||x.ape):x.ape)}</td><td>${x.source}</td><td>${x.mobile||'-'}</td><td><textarea onblur="remark('${x.id}',this.value)">${x.remarks||''}</textarea></td><td><button class="btn sec" onclick="openPros('${x.id}')">Edit</button> <button class="btn danger" onclick="del('${x.id}')">Delete</button></td></tr>`).join('')||'<tr><td colspan="10">No prospects.</td></tr>'}function openPros(i=''){let x=S.p.find(p=>p.id===i);pid.value=x?.id||'';pn.value=x?.name||'';pmob.value=x?.mobile||'';pe.value=x?.email||'';pl.value=x?.link||'';po.value=x?.occ||'';ps.value=x?.source||'Facebook';pst.value=x?.status||'Approach';pp.value=x?.plan||'';pa.value=x?.ape||'';pr.value=x?.remarks||'';pm.classList.remove('hide')}function closeM(i){document.getElementById(i).classList.add('hide')}function savePros(){if(!pn.value.trim())return alert('Client name is required. You can complete the other details later.');let x=S.p.find(p=>p.id===pid.value),old=x?.status;if(!x){x={id:id('P'),agentId:S.me.id,agentName:S.me.name,dateAdded:new Date().toISOString(),count:0};S.p.push(x)}Object.assign(x,{name:pn.value.trim(),mobile:pmob.value,email:pe.value,link:pl.value,occ:po.value,source:ps.value||'Other',status:pst.value||'Approach',plan:pp.value,ape:+pa.value||0,remarks:pr.value});if(old&&old!==x.status)S.h.push({id:id('H'),prospectId:x.id,from:old,to:x.status,date:new Date().toISOString(),agentId:S.me.id});save();closeM('pm');render()}function approach(i,t){let x=S.p.find(p=>p.id===i);x.count=(x.count||0)+1;x.last=new Date().toISOString();save();renderProspects();if(t==='chat'&&x.link)open(x.link,'_blank');if(t==='email'&&x.email)open('https://mail.google.com/mail/?view=cm&fs=1&to='+encodeURIComponent(x.email),'_blank')}function statusChange(i,v){let x=S.p.find(p=>p.id===i);if(v==='Setting Appointment'){apid.value=i;am.classList.remove('hide');return}if(v==='Closed'){cpid.value=i;cd.value=new Date().toISOString().slice(0,10);ca.value=x.ape;cpo.value=x.policy||'';cm.classList.remove('hide');return}let o=x.status;x.status=v;S.h.push({id:id('H'),prospectId:i,from:o,to:v,date:new Date().toISOString(),agentId:S.me.id});save();render()}function autoEnd(){let[h,m]=as.value.split(':').map(Number),d=new Date(2000,0,1,h,m+90);ae.value=d.toTimeString().slice(0,5)}function saveAppt(){if(!ad.value||!as.value||!ae.value)return alert('Date and time required.');let x=S.p.find(p=>p.id===apid.value),o=x.status;x.status='Setting Appointment';S.c.push({id:id('C'),prospectId:x.id,agentId:x.agentId,agentName:x.agentName,date:ad.value,start:as.value,end:ae.value,title:'Client Meeting with '+x.name,entryType:'Client Meeting',type:at.value,location:al.value});S.h.push({id:id('H'),prospectId:x.id,from:o,to:x.status,date:new Date().toISOString(),agentId:S.me.id});save();closeM('am');render()}function saveClose(){if(!cd.value||!ca.value)return alert('Closing date and final APE required.');let x=S.p.find(p=>p.id===cpid.value),o=x.status;Object.assign(x,{status:'Closed',closingDate:cd.value,finalApe:+ca.value,policy:cpo.value});S.h.push({id:id('H'),prospectId:x.id,from:o,to:'Closed',date:new Date().toISOString(),agentId:S.me.id});save();closeM('cm');render()}function remark(i,v){S.p.find(x=>x.id===i).remarks=v;save()}function del(i){if(confirm('Delete prospect?')){S.p=S.p.filter(x=>x.id!==i);save();render()}}function calendarColor(type){return type==='Training'?'#7a4bc2':type==='To-do'?'#d58a13':'#1e66d0'}
 function setupCalendarAgentControls(){
@@ -79,5 +79,292 @@ function logoPreview(){let f=bl.files[0];if(!f)return;let r=new FileReader;r.onl
 function extractColors(src){let im=new Image;im.onload=()=>{let c=document.createElement('canvas'),x=c.getContext('2d');c.width=c.height=64;x.drawImage(im,0,0,64,64);let d=x.getImageData(0,0,64,64).data,m={};for(let i=0;i<d.length;i+=16){if(d[i+3]<180)continue;let r=Math.round(d[i]/32)*32,g=Math.round(d[i+1]/32)*32,b=Math.round(d[i+2]/32)*32;if(r>235&&g>235&&b>235)continue;let k=[Math.min(r,255),Math.min(g,255),Math.min(b,255)].join(',');m[k]=(m[k]||0)+1}let cs=Object.entries(m).sort((a,b)=>b[1]-a[1]).slice(0,3).map(z=>'#'+z[0].split(',').map(v=>(+v).toString(16).padStart(2,'0')).join(''));if(cs[0])bc1.value=cs[0];if(cs[1])bc2.value=cs[1];if(cs[2])bc3.value=cs[2]};im.src=src}
 function saveBrand(){let old=brandObj(),f=bl.files[0],commit=logo=>{localStorage.setItem(K.brand,JSON.stringify({name:bn.value.trim()||'JOSH PRISM',logo:logo||old.logo,c1:bc1.value,c2:bc2.value,c3:bc3.value}));applyBrand();bmsg.innerHTML='<span class="pos">Branding saved.</span>'};if(f){let r=new FileReader;r.onload=()=>commit(r.result);r.readAsDataURL(f)}else commit(old.logo)}
 function resetBrand(){localStorage.removeItem(K.brand);applyBrand();bmsg.innerHTML='<span class="pos">Branding reset.</span>'}
-function render(){renderDash();renderProspects();renderCal();if(adm())renderAgents()}load();applyBrand();url.value=localStorage.getItem(K.url)||'';let sid=localStorage.getItem(K.s),u=S.u.find(x=>x.id===sid&&x.status==='Active');if(S.u.length===0){setup.classList.remove('hide');login.classList.add('hide')}else if(u){S.me=u;show()}else login.classList.remove('hide')
-</script></body></html>
+function render(){renderDash();renderProspects();renderCal();if(adm())renderAgents()}
+</script>
+<script>
+/* ===== GOOGLE SHEET CLOUD DATABASE PATCH =====
+   This patch replaces browser-only localStorage records with a Google Apps Script API.
+   Branding and the Apps Script URL remain local to the browser.
+*/
+const Cloud = {
+  token: localStorage.getItem(K.token) || '',
+  get base(){ return (localStorage.getItem(K.url)||'').trim(); },
+  call(action, data={}) {
+    return new Promise((resolve, reject) => {
+      if(!this.base) return reject(new Error('Google Apps Script Web App URL is not configured.'));
+      const callback = '__jp_cb_' + Date.now() + '_' + Math.random().toString(36).slice(2);
+      const params = new URLSearchParams();
+      params.set('action', action);
+      params.set('callback', callback);
+      if(this.token) params.set('token', this.token);
+      Object.entries(data).forEach(([k,v]) => {
+        params.set(k, typeof v === 'string' ? v : JSON.stringify(v));
+      });
+      const script = document.createElement('script');
+      const timer = setTimeout(() => {
+        cleanup();
+        reject(new Error('Cloud request timed out. Check the Apps Script URL and deployment access.'));
+      }, 20000);
+      function cleanup(){
+        clearTimeout(timer);
+        delete window[callback];
+        script.remove();
+      }
+      window[callback] = (response) => {
+        cleanup();
+        if(response && response.ok) resolve(response);
+        else reject(new Error(response?.error || 'Cloud request failed.'));
+      };
+      script.onerror = () => {
+        cleanup();
+        reject(new Error('Unable to connect to Google Apps Script.'));
+      };
+      script.src = this.base + (this.base.includes('?')?'&':'?') + params.toString();
+      document.body.appendChild(script);
+    });
+  }
+};
+
+function cloudBusy(message='Please wait...'){
+  ln.innerHTML = '<p class="muted">'+message+'</p>';
+}
+function cloudError(el, err){
+  el.innerHTML = '<p class="neg">'+String(err.message||err)+'</p>';
+}
+
+async function cloudBoot(){
+  applyBrand();
+  url.value = localStorage.getItem(K.url)||'';
+  setup.classList.add('hide');
+  login.classList.add('hide');
+  app.classList.add('hide');
+
+  if(!Cloud.base){
+    login.classList.remove('hide');
+    ln.innerHTML = '<p class="neg">Admin setup required: enter the Google Apps Script Web App URL in Settings after opening this file locally once, or set it through the browser console using localStorage.setItem("jp_url","YOUR_URL").</p>';
+    return;
+  }
+
+  try{
+    const status = await Cloud.call('status');
+    if(!status.hasAdmin){
+      setup.classList.remove('hide');
+      return;
+    }
+    if(Cloud.token){
+      try{
+        const session = await Cloud.call('session');
+        S.me = session.user;
+        await cloudReload();
+        show();
+        return;
+      }catch(e){
+        Cloud.token='';
+        localStorage.removeItem(K.token);
+      }
+    }
+    login.classList.remove('hide');
+  }catch(err){
+    login.classList.remove('hide');
+    cloudError(ln, err);
+  }
+}
+
+async function cloudReload(){
+  const r = await Cloud.call('bootstrap');
+  S.u = r.users || [];
+  S.p = r.prospects || [];
+  S.g = r.goals || [];
+  S.c = r.calendar || [];
+  S.h = r.history || [];
+}
+
+createAdmin = async function(){
+  let name=sun.value.trim(), user=suu.value.trim().toLowerCase();
+  sn.innerHTML='';
+  if(!name||!user||!sup.value) return sn.innerHTML='<p class="neg">Complete full name, username, and password.</p>';
+  if(sup.value!==suc.value) return sn.innerHTML='<p class="neg">Passwords do not match.</p>';
+  if(sup.value.length<6) return sn.innerHTML='<p class="neg">Password must be at least 6 characters.</p>';
+  try{
+    sn.innerHTML='<p class="muted">Creating administrator...</p>';
+    await Cloud.call('createAdmin',{name,username:user,password:sup.value,email:sue.value,mobile:sum.value});
+    setup.classList.add('hide');
+    login.classList.remove('hide');
+    lu.value=user;
+    sn.innerHTML='';
+  }catch(err){ cloudError(sn,err); }
+};
+
+doLogin = async function(){
+  let username=lu.value.trim().toLowerCase(), password=lp.value;
+  if(!username||!password) return ln.innerHTML='<p class="neg">Enter username and password.</p>';
+  try{
+    cloudBusy('Signing in...');
+    const r = await Cloud.call('login',{username,password});
+    Cloud.token=r.token;
+    localStorage.setItem(K.token,r.token);
+    S.me=r.user;
+    await cloudReload();
+    ln.innerHTML='';
+    show();
+  }catch(err){ cloudError(ln,err); }
+};
+
+logout = async function(){
+  try{ if(Cloud.token) await Cloud.call('logout'); }catch(e){}
+  Cloud.token='';
+  localStorage.removeItem(K.token);
+  S.me=null;
+  app.classList.add('hide');
+  login.classList.remove('hide');
+  lp.value='';
+};
+
+save = function(){ /* cloud records are saved by each operation */ };
+load = function(){ /* cloud records are loaded by cloudReload */ };
+
+saveGoal = async function(){
+  try{
+    let d=new Date();
+    await Cloud.call('saveGoal',{m:d.getMonth()+1,y:d.getFullYear(),goal:+goal.value||0,ratio:+ratio.value||0,basis:basis.value});
+    await cloudReload(); renderDash();
+  }catch(err){ alert(err.message); }
+};
+
+savePros = async function(){
+  if(!pn.value.trim()) return alert('Client name is required. You can complete the other details later.');
+  try{
+    await Cloud.call('saveProspect',{prospect:{
+      id:pid.value||'', name:pn.value.trim(), mobile:pmob.value, email:pe.value, link:pl.value,
+      occ:po.value, source:ps.value||'Other', status:pst.value||'Approach',
+      plan:pp.value, ape:+pa.value||0, remarks:pr.value
+    }});
+    await cloudReload(); closeM('pm'); render();
+  }catch(err){ alert(err.message); }
+};
+
+approach = async function(i,t){
+  try{
+    const x=S.p.find(p=>p.id===i);
+    await Cloud.call('approach',{id:i});
+    await cloudReload(); renderProspects();
+    if(t==='chat'&&x?.link) open(x.link,'_blank');
+    if(t==='email'&&x?.email) open('https://mail.google.com/mail/?view=cm&fs=1&to='+encodeURIComponent(x.email),'_blank');
+  }catch(err){ alert(err.message); }
+};
+
+statusChange = async function(i,v){
+  let x=S.p.find(p=>p.id===i);
+  if(v==='Setting Appointment'){apid.value=i;am.classList.remove('hide');return}
+  if(v==='Closed'){cpid.value=i;cd.value=new Date().toISOString().slice(0,10);ca.value=x.ape;cpo.value=x.policy||'';cm.classList.remove('hide');return}
+  try{
+    await Cloud.call('changeStatus',{id:i,status:v});
+    await cloudReload(); render();
+  }catch(err){ alert(err.message); renderProspects(); }
+};
+
+saveAppt = async function(){
+  if(!ad.value||!as.value||!ae.value)return alert('Date and time required.');
+  try{
+    await Cloud.call('saveAppointment',{prospectId:apid.value,date:ad.value,start:as.value,end:ae.value,type:at.value,location:al.value});
+    await cloudReload(); closeM('am'); render();
+  }catch(err){ alert(err.message); }
+};
+
+saveClose = async function(){
+  if(!cd.value||!ca.value)return alert('Closing date and final APE required.');
+  try{
+    await Cloud.call('closeProspect',{id:cpid.value,closingDate:cd.value,finalApe:+ca.value,policy:cpo.value});
+    await cloudReload(); closeM('cm'); render();
+  }catch(err){ alert(err.message); }
+};
+
+remark = async function(i,v){
+  try{ await Cloud.call('updateRemark',{id:i,remarks:v}); await cloudReload(); }
+  catch(err){ alert(err.message); }
+};
+
+del = async function(i){
+  if(!confirm('Delete prospect?')) return;
+  try{ await Cloud.call('deleteProspect',{id:i}); await cloudReload(); render(); }
+  catch(err){ alert(err.message); }
+};
+
+saveManualEvent = async function(){
+  if(!meti.value.trim()||!med.value)return alert('Title and date are required.');
+  try{
+    await Cloud.call('saveCalendar',{entry:{
+      agentId:mea.value, date:med.value, start:mes.value, end:mee.value,
+      title:meti.value.trim(), entryType:met.value, notes:men.value, location:men.value
+    }});
+    await cloudReload(); closeM('mem');
+    if(adm())S.calVisible.add(mea.value);
+    renderCal(); refreshCalendarEvents();
+  }catch(err){ alert(err.message); }
+};
+
+saveAgent = async function(){
+  let name=an.value.trim(),user=au.value.trim().toLowerCase();
+  if(!name||!user||!ap.value)return alert('Name, username, and password required.');
+  try{
+    await Cloud.call('saveAgent',{name,username:user,password:ap.value,email:ae2.value,mobile:amo.value,role:ar.value});
+    await cloudReload(); closeM('aum'); renderAgents();
+    an.value=au.value=ap.value=ae2.value=amo.value='';
+  }catch(err){ alert(err.message); }
+};
+
+toggleAgent = async function(i){
+  let x=S.u.find(x=>x.id===i); if(!x)return;
+  if(i===S.me.id&&x.status==='Active')return alert('You cannot deactivate your current account.');
+  try{ await Cloud.call('toggleAgent',{id:i}); await cloudReload(); renderAgents(); }
+  catch(err){ alert(err.message); }
+};
+
+rmAgent = async function(i){
+  if(i===S.me.id)return alert('You cannot delete your current account.');
+  if(!confirm('Delete account?'))return;
+  try{ await Cloud.call('deleteAgent',{id:i}); await cloudReload(); renderAgents(); }
+  catch(err){ alert(err.message); }
+};
+
+saveUrl = async function(){
+  const v=url.value.trim();
+  if(!v)return un.textContent='Enter the Web App URL.';
+  localStorage.setItem(K.url,v);
+  un.textContent='Saved. Reloading...';
+  setTimeout(()=>location.reload(),500);
+};
+
+testUrl = async function(){
+  try{
+    localStorage.setItem(K.url,url.value.trim());
+    const r=await Cloud.call('status');
+    un.textContent=r.ok?'Connected.':'Failed.';
+  }catch(e){un.textContent=e.message}
+};
+
+importCSV = async function(){
+  let f=file.files[0];if(!f)return alert('Choose CSV.');
+  let r=new FileReader();
+  r.onload=async()=>{
+    try{
+      let lines=String(r.result||'').split(/\r?\n/).filter(Boolean);
+      if(!lines.length)return;
+      let h=lines.shift().split(',').map(x=>x.replaceAll('"','').trim()), rows=[];
+      for(let line of lines){
+        let v=line.match(/("[^"]*(?:""[^"]*)*"|[^,]+)/g)?.map(x=>x.replace(/^"|"$/g,'').replaceAll('""','"'))||[];
+        let o=Object.fromEntries(h.map((k,i)=>[k,v[i]||''])),name=o['Client Name']||o['Name'];
+        if(!name)continue;
+        rows.push({name,mobile:o['Mobile']||o['Mobile Number']||'',email:o['Email']||'',link:o['Link']||'',occ:o['Occupation']||'',source:o['Source']||'Other',status:o['Status']||'Approach',plan:o['Plan']||'',ape:+(o['APE']||o['Estimated APE']||0),remarks:o['Remarks']||''});
+      }
+      const out=await Cloud.call('importProspects',{rows});
+      await cloudReload();render();ip.innerHTML='<p class="pos">'+out.imported+' imported.</p>';
+    }catch(err){ip.innerHTML='<p class="neg">'+err.message+'</p>'}
+  };
+  r.readAsText(f);
+};
+
+cloudBoot();
+</script>
+
+</body></html>
