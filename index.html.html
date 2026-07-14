@@ -1,0 +1,347 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>JOSH PRISM</title><script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script><style>
+:root{--n:#10233f;--b:#1e66d0;--a:#c79a2b;--g:#f4f7fb;--l:#dce4ef;--r:#cf3f4b;--ok:#14845b}*{box-sizing:border-box}body{margin:0;font-family:Arial;background:var(--g);color:#182230}button,input,select,textarea{font:inherit}.hide{display:none!important}.login{min-height:100vh;display:grid;place-items:center;background:linear-gradient(135deg,var(--n),var(--b));padding:20px}.box,.card{background:#fff;border:1px solid #e5ebf2;border-radius:16px;box-shadow:0 10px 28px rgba(16,35,63,.09)}.box{width:min(430px,100%);padding:25px}.field{margin:10px 0}.field label{display:block;font-size:11px;font-weight:800;color:#6b7b90;margin-bottom:6px}.field input,.field select,.field textarea{width:100%;padding:11px;border:1px solid var(--l);border-radius:10px}.btn{border:0;border-radius:10px;padding:10px 14px;font-weight:800;cursor:pointer}.pri{background:linear-gradient(135deg,var(--b),var(--a));color:#fff}.sec{background:#fff;border:1px solid var(--l)}.danger{background:#fff0f1;color:var(--r)}.app{display:grid;grid-template-columns:240px 1fr;min-height:100vh}.side{background:linear-gradient(180deg,var(--n),#091729);color:#fff;padding:20px;position:sticky;top:0;height:100vh}.side h2{margin:0}.side small{color:#b9c8da}.nav{display:grid;gap:7px;margin-top:20px}.nav button{background:transparent;border:0;color:#cbd7e7;text-align:left;padding:11px;border-radius:9px}.nav button.on,.nav button:hover{background:#ffffff1c;color:#fff}.main{padding:22px;min-width:0}.top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.top h1{margin:0}.panel{display:none}.panel.on{display:block}.grid{display:grid;gap:12px}.kpis{grid-template-columns:repeat(4,1fr);margin:16px 0}.kpi{padding:15px;background:#fff;border-radius:14px;border:1px solid #e5ebf2}.kpi b{font-size:23px;display:block;margin-top:7px}.neg{color:var(--r)}.pos{color:var(--ok)}.status{grid-template-columns:repeat(7,1fr);margin-bottom:15px}.status .card{padding:12px;cursor:pointer}.status b{font-size:21px;display:block}.card{padding:16px;margin-top:15px}.filters{display:grid;grid-template-columns:2fr repeat(5,1fr);gap:8px}.filters>*{padding:9px;border:1px solid var(--l);border-radius:9px}.table{overflow:auto;border:1px solid var(--l);border-radius:11px}table{border-collapse:collapse;width:100%;min-width:1250px}th,td{padding:10px;border-bottom:1px solid #e8edf3;text-align:left;font-size:12px;vertical-align:top}th{background:#f5f8fc;position:sticky;top:0}.quick{display:flex;gap:6px;align-items:center}.quick button{border:1px solid var(--l);background:#fff;border-radius:8px;padding:6px}.muted{color:#6b7b90;font-size:11px}.modal{position:fixed;inset:0;background:#07122499;display:grid;place-items:center;padding:18px;z-index:20}.modal .card{width:min(850px,100%);max-height:92vh;overflow:auto;margin:0}.form{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.span3{grid-column:span 3}.charts{grid-template-columns:1fr 1fr}.chart{height:320px}.agentrow{display:grid;grid-template-columns:1.5fr .7fr .7fr auto;gap:8px;padding:10px;border:1px solid var(--l);border-radius:9px;margin:7px 0}@media(max-width:900px){.app{grid-template-columns:1fr}.side{height:auto;position:relative}.nav{grid-template-columns:repeat(3,1fr)}.kpis{grid-template-columns:1fr 1fr}.status{grid-template-columns:1fr 1fr}.filters,.form,.charts{grid-template-columns:1fr}.span3{grid-column:auto}}@media(max-width:520px){.kpis{grid-template-columns:1fr}}
+
+.calendar-toolbar{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:12px}.agent-toggles{display:flex;gap:8px;flex-wrap:wrap}.agent-toggle{display:inline-flex;align-items:center;gap:6px;padding:5px 9px;border:1px solid var(--l);border-radius:999px;background:#fff;cursor:pointer;font-size:12px;font-weight:700}.agent-toggle .circle{width:12px;height:12px;border-radius:50%;border:2px solid #9aabc0;background:#fff}.agent-toggle.on .circle{background:var(--b);border-color:var(--b);box-shadow:0 0 0 3px color-mix(in srgb,var(--b) 18%,transparent)}#calendarView{min-height:680px}.fc .fc-toolbar-title{font-size:20px}.fc .fc-button{background:var(--b);border-color:var(--b)}.fc .fc-button-primary:not(:disabled).fc-button-active,.fc .fc-button-primary:not(:disabled):active{background:var(--n);border-color:var(--n)}.event-legend{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:#5d6d82}.legend-dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:5px}.manual-event-form{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}@media(max-width:700px){.manual-event-form{grid-template-columns:1fr}#calendarView{min-height:560px}}
+
+/* ===== CALENDAR & TODO V2.3 ===== */
+.calendar-layout{display:grid;grid-template-columns:320px minmax(0,1fr);gap:14px;align-items:start}.task-editor{border:1px solid var(--l);border-radius:14px;padding:14px;background:#fff}.task-editor h3,.task-board h3{margin:0 0 12px}.task-board{border:1px solid var(--l);border-radius:14px;padding:14px;background:#fff}.task-item{border:1px solid var(--l);border-radius:10px;padding:10px 12px;margin-bottom:8px;display:grid;grid-template-columns:auto 1fr auto;gap:9px;align-items:start;cursor:pointer}.task-item:hover{background:#f8fbff}.task-dot{width:11px;height:11px;border-radius:50%;margin-top:4px}.task-title{font-weight:800}.task-meta{font-size:11px;color:#607087;margin-top:4px}.task-actions{display:flex;gap:6px;align-items:center}.task-empty{color:#6b7b90;font-size:12px;padding:12px 0}.calendar-card{padding:0!important;overflow:hidden}.cal-head{display:grid;grid-template-columns:50px 1fr 110px;align-items:center;padding:16px 14px 8px}.cal-title{text-align:center;font-weight:900;color:#062b64;font-size:20px}.cal-title small{display:block;font-size:10px;margin-top:1px}.cal-nav{width:34px;height:34px;border-radius:50%;border:1px solid #bcd3f3;background:#eef6ff;color:#0c57aa;font-weight:900;cursor:pointer}.cal-right{display:flex;gap:7px;justify-content:flex-end}.today-btn{background:#071c38;color:#fff;border:0;border-radius:8px;padding:8px 12px;font-weight:800;cursor:pointer}.cal-weekdays{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;padding:0 12px}.cal-weekdays div{background:#061a35;color:#fff;text-align:center;padding:8px;border-radius:8px;font-size:11px;font-weight:800}.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;padding:5px 12px 12px}.cal-day{min-height:100px;border:1px solid #d9e1ec;border-radius:10px;padding:7px;background:#fff;overflow:hidden}.cal-day.other{background:#f4f7fa;color:#90a0b7}.cal-day.today{background:#061a35;color:#fff}.day-num{font-weight:800;font-size:12px;margin-bottom:5px}.cal-event{display:block;width:100%;border:1px solid transparent;border-radius:6px;padding:4px 6px;margin:3px 0;font-size:10px;font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer;color:#10233f}.cal-event small{display:block;font-size:8px;font-weight:700}.color-row{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}.color-choice{height:34px;border-radius:8px;border:2px solid transparent;cursor:pointer}.color-choice.on{outline:3px solid #dbe7f7;border-color:#fff}.checkbox-row{display:flex;gap:8px;align-items:center;font-size:12px;font-weight:700;margin:10px 0}.done-section{margin-top:18px;border-top:1px solid var(--l);padding-top:14px}.done-item{opacity:.75}.done-item .task-title{text-decoration:line-through}.task-editor .btn{width:100%;margin-top:7px}.task-editor .btn.sec,.task-editor .btn.danger{width:100%}
+@media(max-width:980px){.calendar-layout{grid-template-columns:1fr}.cal-day{min-height:90px}}@media(max-width:650px){.cal-weekdays div{font-size:9px;padding:6px 2px}.cal-grid,.cal-weekdays{gap:2px;padding-left:4px;padding-right:4px}.cal-day{min-height:75px;padding:4px}.cal-event{font-size:8px;padding:3px}.cal-head{grid-template-columns:40px 1fr 90px}.cal-title{font-size:16px}}
+
+/* ===== V2.5 LARGE CALENDAR + TYPE TOGGLES ===== */
+.calendar-layout{display:grid;grid-template-columns:320px minmax(0,1fr);gap:14px;align-items:start}
+.task-board{max-height:560px;overflow:hidden;display:flex;flex-direction:column}
+#currentTaskList{max-height:310px;overflow-y:auto;padding-right:5px}
+#doneTaskList{max-height:170px;overflow-y:auto;padding-right:5px}
+.calendar-full{margin-top:16px}
+.calendar-full .calendar-card{width:100%;margin-top:0}
+#calendarView{min-height:760px}
+.cal-day{min-height:120px;max-height:150px;overflow-y:auto;overflow-x:hidden}
+.cal-event{white-space:normal;line-height:1.15}
+.type-toggles{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 14px}
+.type-toggle{display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border:1px solid var(--l);border-radius:999px;background:#fff;cursor:pointer;font-size:12px;font-weight:800}
+.type-toggle .circle{width:12px;height:12px;border-radius:50%;border:2px solid #9aabc0;background:#fff}
+.type-toggle.on .circle{border-color:currentColor;background:currentColor;box-shadow:0 0 0 3px rgba(30,102,208,.12)}
+.filter-label{font-size:11px;font-weight:900;color:#607087;text-transform:uppercase;letter-spacing:.04em;margin-top:4px}
+@media(max-width:980px){.calendar-layout{grid-template-columns:1fr}.task-board{max-height:none}#currentTaskList,#doneTaskList{max-height:260px}#calendarView{min-height:620px}}
+
+.calendar-filter-bar{margin:0 12px 10px;padding:10px 12px;border:1px solid var(--l);border-radius:12px;background:#f8fbff}.calendar-filter-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.calendar-filter-row+.calendar-filter-row{margin-top:8px}.calendar-filter-row .filter-label{margin:0;min-width:145px;font-size:11px;font-weight:900;color:#53667f}.google-cal-btn{background:#fff;border:1px solid #b8c9df;color:#0b57d0;border-radius:8px;padding:7px 10px;font-weight:800;cursor:pointer;font-size:11px;white-space:nowrap}.google-cal-btn:hover{background:#eef5ff}.task-google-btn{margin-top:7px;width:100%}
+
+/* ===== STABLE REBUILD PATCH ===== */
+.sync-pill{font-size:11px;font-weight:800;padding:7px 10px;border-radius:999px;background:#eef4fb;color:#52647b}
+.sync-pill.ok{background:#e8f7f0;color:#08764e}.sync-pill.busy{background:#fff4d8;color:#996100}.sync-pill.bad{background:#fff0f1;color:#b22d3a}
+#agents{display:grid;gap:12px;margin-top:14px}
+.agentrow{display:grid!important;grid-template-columns:minmax(170px,1fr) 92px 92px minmax(430px,2.1fr)!important;gap:12px!important;align-items:center!important;padding:15px!important;border:1px solid var(--l)!important;border-radius:14px!important;background:#fff!important}
+.agent-actions{display:grid;gap:9px;min-width:0}.agent-action-row{display:flex;gap:7px;flex-wrap:wrap}.agent-link-line{display:grid;grid-template-columns:minmax(0,1fr) 112px;gap:8px}
+.agent-link-line input{width:100%;min-width:0;height:40px;padding:9px 10px;border:1px solid var(--l);border-radius:9px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden}
+.agent-equal{height:40px!important;min-width:112px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;font-size:12px!important}
+@media(max-width:1050px){.agentrow{grid-template-columns:1fr 90px 90px!important}.agent-actions{grid-column:1/-1}}
+@media(max-width:650px){.agentrow{grid-template-columns:1fr!important}.agent-actions{grid-column:auto}.agent-action-row{display:grid;grid-template-columns:1fr 1fr}.agent-link-line{grid-template-columns:1fr}.agent-equal{width:100%!important;min-width:0!important}}
+
+</style></head><body>
+<div id="setup" class="login hide"><div class="box"><h1 id="setupNameTitle">JOSH PRISM</h1><p>First-Time Administrator Setup</p><div class="field"><label>FULL NAME</label><input id="sun"></div><div class="field"><label>USERNAME</label><input id="suu"></div><div class="field"><label>EMAIL</label><input id="sue" type="email"></div><div class="field"><label>MOBILE</label><input id="sum"></div><div class="field"><label>PASSWORD</label><input id="sup" type="password"></div><div class="field"><label>CONFIRM PASSWORD</label><input id="suc" type="password"></div><button class="btn pri" style="width:100%" onclick="createAdmin()">Create Administrator</button><div id="sn"></div></div></div>
+<div id="login" class="login hide"><div class="box"><div style="display:flex;gap:12px;align-items:center"><img id="loginLogo" class="hide" style="width:58px;height:58px;object-fit:contain"><div><h1 id="loginName">JOSH PRISM</h1><p>Prospect Tracker</p></div></div><div id="inviteBanner" class="hide" style="margin:12px 0;padding:10px 12px;border-radius:10px;background:#eef5ff;color:#0b57d0;font-size:12px;font-weight:700"></div><div class="field"><label>USERNAME</label><input id="lu"></div><div class="field"><label>PASSWORD</label><input id="lp" type="password"></div><button class="btn pri" style="width:100%" onclick="doLogin()">Login</button><div id="ln"></div><p class="muted" style="margin-top:12px">Default Admin: <b>admin</b> / <b>admin123</b></p></div></div>
+<div id="app" class="app hide"><aside class="side"><img id="sideLogo" class="hide" style="max-width:170px;max-height:90px;object-fit:contain;margin-bottom:10px"><h2 id="sideName">JOSH PRISM</h2><small>Prospect Tracker</small><p><b id="who"></b><br><small id="role"></small></p><div class="nav"><button class="on" data-p="dash">Dashboard</button><button data-p="pros">Prospects</button><button data-p="cal">Calendar</button><button data-p="ana">Analytics</button><button data-p="imp">Import</button><button id="setnav" data-p="set">Settings</button><button onclick="logout()">Logout</button></div></aside><main class="main"><div class="top"><div><h1 id="title">Dashboard</h1><p class="muted">Monthly goal and pipeline monitoring</p></div><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><span id="syncState" class="sync-pill">Local</span><button class="btn pri" onclick="openPros()">+ Add Prospect</button></div></div>
+<section id="dash" class="panel on"><div class="card"><h3>Monthly Goal Setup</h3><div class="form"><div class="field"><label>MONTHLY APE GOAL</label><input id="goal" type="number"></div><div class="field"><label>CLOSING RATIO (%)</label><input id="ratio" type="number"></div><div class="field"><label>BASIS</label><select id="basis"><option>Manual Closing Ratio</option><option>Last Month</option><option>Average Monthly</option></select></div></div><button class="btn pri" onclick="saveGoal()">Save Goal</button></div><div id="kpis" class="grid kpis"></div><div id="status" class="grid status"></div></section>
+<section id="pros" class="panel"><div class="card"><div class="filters"><input id="fs" placeholder="Search client"><select id="fm"></select><select id="fy"></select><select id="fa"></select><select id="fst"></select><select id="fso"></select></div></div><div class="card"><button class="btn sec" onclick="exportCSV()">Export CSV</button><div class="table" style="margin-top:10px"><table><thead><tr id="th"></tr></thead><tbody id="tb"></tbody></table></div></div></section>
+<section id="cal" class="panel">
+<div class="card">
+  <div class="calendar-toolbar"><div><h2 style="margin:0 0 5px">Calendar & To-do</h2><p class="muted">Client meetings from Prospect are added automatically. Training, Birthday, To-do, and Other tasks may be added to the calendar or kept in the task list only.</p></div></div>
+  <div class="calendar-layout">
+    <div class="task-editor">
+      <h3 id="taskFormTitle">Encode Task</h3><input id="editEventId" type="hidden">
+      <div class="field"><label>TASK / TITLE</label><input id="meti" placeholder="Training / Birthday / Follow-up / Task"></div>
+      <div class="field"><label>TASK TYPE</label><select id="met"><option>To-do</option><option>Training</option><option>Birthday</option><option>Other</option></select></div>
+      <div class="field"><label>COLOR CODE</label><div id="taskColors" class="color-row"></div><input id="taskColor" type="hidden" value="#1e66d0"></div>
+      <div class="field"><label>DATE</label><input id="med" type="date"></div>
+      <div class="field"><label>START TIME</label><input id="mes" type="time"></div>
+      <div class="field"><label>END TIME</label><input id="mee" type="time"></div>
+      <div class="field"><label>REPEAT</label><select id="mer"><option>No Repeat</option><option>Daily</option><option>Weekly</option><option>Monthly</option><option>Yearly</option></select></div>
+      <div class="field"><label>ASSIGNED AGENT</label><select id="mea"></select></div>
+      <div class="field"><label>NOTES / LOCATION</label><textarea id="men"></textarea></div>
+      <label class="checkbox-row"><input id="showCalendar" type="checkbox" checked> Add to Calendar</label>
+      <button class="btn pri" onclick="saveManualEvent()">Save Task</button>
+      <button class="btn sec" onclick="clearTaskForm()">Clear</button>
+      <button id="addGoogleCalendarBtn" class="btn sec task-google-btn hide" onclick="addCurrentTaskToGoogleCalendar()">Add to My Google Calendar</button>
+      <button id="deleteTaskBtn" class="btn danger hide" onclick="deleteCalendarTask()">Delete</button>
+    </div>
+    <div class="task-board">
+      <h3>Current Tasks</h3><div id="currentTaskList"></div>
+      <div class="done-section"><h3>Done Tasks</h3><div id="doneTaskList"></div></div>
+    </div>
+  </div>
+  <div class="calendar-full">
+    <div class="calendar-filter-bar">
+      <div class="calendar-filter-row"><div class="filter-label">Agents</div><div id="calendarAgentControls" class="agent-toggles"></div></div>
+      <div class="calendar-filter-row"><div class="filter-label">Calendar Items</div><div id="calendarTypeControls" class="type-toggles"></div></div>
+    </div>
+    <div class="card calendar-card">
+      <div class="cal-head"><button class="cal-nav" onclick="moveCal(-1)">‹</button><div id="calTitle" class="cal-title"></div><div class="cal-right"><button class="cal-nav" onclick="moveCal(1)">›</button><button class="today-btn" onclick="goToday()">Today</button></div></div>
+      <div class="cal-weekdays"><div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div></div>
+      <div id="calendarView" class="cal-grid"></div>
+    </div>
+  </div>
+</div></section>
+<section id="ana" class="panel"><div class="grid charts"><div class="card"><h3>Monthly Pipeline</h3><div class="chart"><canvas id="pc"></canvas></div></div><div class="card"><h3>Closed APE</h3><div class="chart"><canvas id="ac"></canvas></div></div></div></section>
+<section id="imp" class="panel"><div class="card"><h3>Import CSV</h3><input type="file" id="file" accept=".csv"><button class="btn pri" onclick="importCSV()">Import</button><div id="ip"></div></div></section>
+<section id="set" class="panel"><div class="grid charts">
+<div class="card"><h3>Agent Accounts</h3><button class="btn pri" onclick="openAgent()">+ Add Agent</button><div id="agents"></div></div>
+<div class="card"><h3>App Branding</h3><div class="field"><label>APP NAME</label><input id="bn"></div><div class="field"><label>UPLOAD LOGO</label><input id="bl" type="file" accept="image/*" onchange="logoPreview()"></div><img id="bp" class="hide" style="width:120px;height:90px;object-fit:contain;border:1px solid var(--l);border-radius:10px;padding:8px"><p><label><input id="bac" type="checkbox" checked> Auto colorway from logo</label></p><div class="form"><div class="field"><label>PRIMARY</label><input id="bc1" type="color"></div><div class="field"><label>SECONDARY</label><input id="bc2" type="color"></div><div class="field"><label>ACCENT</label><input id="bc3" type="color"></div></div><button class="btn pri" onclick="saveBrand()">Save Branding</button> <button class="btn sec" onclick="resetBrand()">Reset</button><p id="bmsg"></p></div>
+<div class="card"><h3>Google Apps Script</h3><div class="field"><label>WEB APP URL</label><input id="url"></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn pri" onclick="saveUrl()">Save</button><button class="btn sec" onclick="testUrl()">Test</button><button class="btn sec" onclick="copyAppScript()">Copy Apps Script</button></div><p id="un"></p></div></div></section>
+</main></div>
+<div id="pm" class="modal hide"><div class="card"><h3 id="pmt">Add Prospect</h3><input id="pid" type="hidden"><div class="form"><div class="field"><label>CLIENT NAME</label><input id="pn"></div><div class="field"><label>MOBILE</label><input id="pmob"></div><div class="field"><label>EMAIL</label><input id="pe"></div><div class="field span3"><label>SOCIAL LINK</label><input id="pl"></div><div class="field"><label>OCCUPATION</label><input id="po"></div><div class="field"><label>SOURCE</label><select id="ps"></select></div><div class="field"><label>STATUS</label><select id="pst"></select></div><div class="field"><label>PLAN</label><input id="pp"></div><div class="field"><label>ESTIMATED APE</label><input id="pa" type="number"></div><div class="field span3"><label>REMARKS</label><textarea id="pr"></textarea></div></div><button class="btn pri" onclick="savePros()">Save</button> <button class="btn sec" onclick="closeM('pm')">Cancel</button></div></div>
+<div id="am" class="modal hide"><div class="card" style="width:min(560px,100%)"><h3>Appointment</h3><input id="apid" type="hidden"><div class="form"><div class="field"><label>DATE</label><input id="ad" type="date"></div><div class="field"><label>START</label><input id="as" type="time" onchange="autoEnd()"></div><div class="field"><label>END</label><input id="ae" type="time"></div><div class="field"><label>TYPE</label><select id="at"><option>Online</option><option>Face to Face</option></select></div><div class="field span3"><label>LOCATION/LINK</label><input id="al"></div></div><button class="btn pri" onclick="saveAppt()">Save</button> <button class="btn sec" onclick="closeM('am')">Cancel</button></div></div>
+<div id="cm" class="modal hide"><div class="card" style="width:min(560px,100%)"><h3>Close Prospect</h3><input id="cpid" type="hidden"><div class="form"><div class="field"><label>CLOSING DATE</label><input id="cd" type="date"></div><div class="field"><label>FINAL APE</label><input id="ca" type="number"></div><div class="field"><label>POLICY NUMBER</label><input id="cpo"></div></div><button class="btn pri" onclick="saveClose()">Confirm</button> <button class="btn sec" onclick="closeM('cm')">Cancel</button></div></div>
+<div id="aum" class="modal hide"><div class="card" style="width:min(650px,100%)"><h3>Add Account</h3><div class="form"><div class="field"><label>FULL NAME</label><input id="an"></div><div class="field"><label>USERNAME</label><input id="au"></div><div class="field"><label>PASSWORD</label><input id="ap" type="password"></div><div class="field"><label>EMAIL</label><input id="ae2" type="email"></div><div class="field"><label>MOBILE</label><input id="amo"></div><div class="field"><label>ROLE</label><select id="ar"><option>Agent</option><option>Admin</option></select></div></div><button class="btn pri" onclick="saveAgent()">Save</button> <button class="btn sec" onclick="closeM('aum')">Cancel</button></div></div>
+<script>
+const ST=['Approach','Setting Appointment','Done Client Meeting','For Closing','Closed','COI'],SO=['Facebook','TikTok','Instagram','Referral','Existing Client','Organic','Walk-in','Event','Other'];let S={u:[],p:[],g:[],c:[],h:[],me:null,ch:{},calendar:null,calVisible:new Set(),calTypes:new Set(['Client Meeting','To-do','Training','Birthday','Other'])};const K={u:'jp_u',p:'jp_p',g:'jp_g',c:'jp_c',h:'jp_h',s:'jp_s',url:'jp_url',apiSession:'jp_api_session',brand:'jp_brand'};function id(x){return x+'-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,6)}function load(){
+  S.u=JSON.parse(localStorage.getItem(K.u)||'[]');
+  for(let k of ['p','g','c','h'])S[k]=JSON.parse(localStorage.getItem(K[k])||'[]');
+  // Always keep a working administrator account available.
+  let admin=S.u.find(x=>(x.username||'').toLowerCase()==='admin');
+  if(!admin){
+    S.u.unshift({
+      id:'ADMIN-JOSHUA',
+      name:'Joshua Senerez',
+      username:'admin',
+      pass:'admin123',
+      email:'plukjoshuasenerez@gmail.com',
+      mobile:'',
+      role:'Admin',
+      status:'Active',
+      accessToken:secureToken()
+    });
+  }else{
+    admin.name=admin.name||'Joshua Senerez';
+    admin.pass='admin123';
+    admin.role='Admin';
+    admin.status='Active';
+    admin.accessToken=admin.accessToken||secureToken();
+  }
+  saveLocalOnly();
+}let syncTimer=null,isHydrating=false;
+function saveLocalOnly(){for(let k of ['u','p','g','c','h'])localStorage.setItem(K[k],JSON.stringify(S[k]))}
+function getApiUrl(){
+  const fromLink=new URLSearchParams(location.search).get('api');
+  if(fromLink){localStorage.setItem(K.url,fromLink);return fromLink}
+  return (localStorage.getItem(K.url)||'').trim();
+}
+function setSyncState(text,type=''){
+  if(!window.syncState)return;
+  syncState.textContent=text;
+  syncState.className='sync-pill '+type;
+}
+function save(){
+  saveLocalOnly();
+  if(isHydrating||!S.me||!getApiUrl()||!localStorage.getItem(K.apiSession))return;
+  clearTimeout(syncTimer);
+  setSyncState('Saving…','busy');
+  syncTimer=setTimeout(pushSnapshot,500);
+}
+async function apiPost(action,payload={}){
+  const api=getApiUrl();
+  if(!api)throw new Error('Apps Script URL is not configured.');
+  const response=await fetch(api,{
+    method:'POST',
+    headers:{'Content-Type':'text/plain;charset=utf-8'},
+    body:JSON.stringify({
+      action,
+      sessionToken:localStorage.getItem(K.apiSession)||'',
+      accessToken:new URLSearchParams(location.search).get('access')||'',
+      ...payload
+    })
+  });
+  const result=await response.json();
+  if(!result.ok)throw new Error(result.error||'Server request failed.');
+  return result;
+}
+async function pushSnapshot(){
+  try{
+    await apiPost('saveSnapshot',{data:{users:S.u,prospects:S.p,goals:S.g,calendar:S.c,history:S.h}});
+    setSyncState('Synced','ok');
+  }catch(error){
+    console.error(error);
+    setSyncState('Sync failed','bad');
+  }
+}function money(n){return new Intl.NumberFormat('en-PH',{style:'currency',currency:'PHP',maximumFractionDigits:0}).format(+n||0)}function adm(){return S.me?.role==='Admin'}function nowMY(){let d=new Date;return[m=d.getMonth()+1,y=d.getFullYear()]}function createAdmin(){let name=sun.value.trim(),user=suu.value.trim().toLowerCase();if(!name||!user||!sup.value)return sn.innerHTML='<p class="neg">Complete full name, username, and password.</p>';if(sup.value!==suc.value)return sn.innerHTML='<p class="neg">Passwords do not match.</p>';if(sup.value.length<6)return sn.innerHTML='<p class="neg">Password must be at least 6 characters.</p>';S.u=[{id:id('U'),name,username:user,pass:sup.value,email:sue.value,mobile:sum.value,role:'Admin',status:'Active'}];save();setup.classList.add('hide');login.classList.remove('hide');lu.value=user}
+async function doLogin(){
+  const username=lu.value.trim().toLowerCase();
+  const password=lp.value;
+  ln.innerHTML='';
+
+  // Login locally first so an old or unavailable Apps Script can never block access.
+  const user=S.u.find(x=>(x.username||'').toLowerCase()===username&&x.pass===password&&x.status==='Active');
+  if(!user){
+    ln.innerHTML='<p class="neg">Incorrect username or password.</p>';
+    return;
+  }
+
+  S.me=user;
+  localStorage.setItem(K.s,user.id);
+  show();
+
+  // Shared Google Sheet sync remains optional and runs only when a compatible server session exists.
+  if(getApiUrl()) setSyncState('Local mode','');
+}
+function show(){login.classList.add('hide');app.classList.remove('hide');who.textContent=S.me.name;role.textContent=S.me.role;setnav.classList.toggle('hide',!adm());init();render()}document.querySelectorAll('.nav button[data-p]').forEach(b=>b.onclick=()=>{document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('on'));b.classList.add('on');document.querySelectorAll('.panel').forEach(x=>x.classList.remove('on'));document.getElementById(b.dataset.p).classList.add('on');title.textContent=b.textContent;if(b.dataset.p==='ana')charts();if(b.dataset.p==='set')renderAgents()});function init(){let d=new Date;fm.innerHTML='<option value="0">All Months</option>'+Array.from({length:12},(_,i)=>`<option value="${i+1}" ${i===d.getMonth()?'selected':''}>${new Date(2000,i).toLocaleString('en',{month:'long'})}</option>`).join('');fy.innerHTML='<option value="0">All Years</option>'+Array.from({length:5},(_,i)=>`<option ${d.getFullYear()-i===d.getFullYear()?'selected':''}>${d.getFullYear()-i}</option>`).join('');fst.innerHTML='<option value="">All Status</option>'+ST.map(x=>`<option>${x}</option>`).join('');fso.innerHTML='<option value="">All Sources</option>'+SO.map(x=>`<option>${x}</option>`).join('');fa.innerHTML=adm()?'<option value="ALL">All Agents</option>'+S.u.filter(x=>x.role==='Agent').map(x=>`<option value="${x.id}">${x.name}</option>`).join(''):`<option value="${S.me.id}">${S.me.name}</option>`;ps.innerHTML=SO.map(x=>`<option>${x}</option>`).join('');pst.innerHTML=ST.map(x=>`<option>${x}</option>`).join('');[fs,fm,fy,fa,fst,fso].forEach(x=>x.oninput=renderProspects)}function mine(){return S.p.filter(x=>adm()||x.agentId===S.me.id)}function filtered(){let a=mine(),q=fs.value.toLowerCase(),m=+fm.value,y=+fy.value;if(q)a=a.filter(x=>x.name.toLowerCase().includes(q));if(m)a=a.filter(x=>new Date(x.dateAdded).getMonth()+1===m);if(y)a=a.filter(x=>new Date(x.dateAdded).getFullYear()===y);if(fa.value&&fa.value!=='ALL')a=a.filter(x=>x.agentId===fa.value);if(fst.value)a=a.filter(x=>x.status===fst.value);if(fso.value)a=a.filter(x=>x.source===fso.value);return a}function goalObj(){let d=new Date;return S.g.find(x=>x.agentId===S.me.id&&x.m===d.getMonth()+1&&x.y===d.getFullYear())||{goal:0,ratio:0,basis:'Manual Closing Ratio'}}function saveGoal(){let d=new Date,g=S.g.find(x=>x.agentId===S.me.id&&x.m===d.getMonth()+1&&x.y===d.getFullYear());if(!g){g={id:id('G'),agentId:S.me.id,m:d.getMonth()+1,y:d.getFullYear()};S.g.push(g)}g.goal=+goal.value||0;g.ratio=+ratio.value||0;g.basis=basis.value;save();renderDash()}function renderDash(){let d=new Date,a=mine().filter(x=>new Date(x.dateAdded).getMonth()===d.getMonth()&&new Date(x.dateAdded).getFullYear()===d.getFullYear()),g=goalObj();goal.value=g.goal;ratio.value=g.ratio;basis.value=g.basis;let closed=a.filter(x=>x.status==='Closed'),done=a.filter(x=>['Done Client Meeting','For Closing','Closed'].includes(x.status)),ape=closed.reduce((s,x)=>s+(+x.finalApe||+x.ape||0),0),gap=ape-g.goal,cr=done.length?closed.length/done.length*100:0,pipe=a.filter(x=>['Approach','Setting Appointment','Done Client Meeting','For Closing'].includes(x.status)).reduce((s,x)=>s+(+x.ape||0),0),r=(g.ratio||cr)/100,pt=r?g.goal/r:0,pg=pipe-pt;let c=[['Goal',money(g.goal),''],['Current APE',money(ape),''],['APE Goal Gap',money(gap),gap>=0?'pos':'neg'],['Closing Ratio',cr.toFixed(1)+'%',''],['Pipeline APE',money(pipe),''],['Pipeline Target',pt?money(pt):'N/A',''],['Pipeline Gap',money(pg),pg>=0?'pos':'neg']];kpis.innerHTML=c.map(x=>`<div class="kpi"><small>${x[0]}</small><b class="${x[2]}">${x[1]}</b></div>`).join('');status.innerHTML=ST.concat('Total').map(s=>`<div class="card" onclick="fstat('${s}')"><b>${s==='Total'?a.length:a.filter(x=>x.status===s).length}</b><small>${s}</small></div>`).join('')}function fstat(s){document.querySelector('[data-p="pros"]').click();fst.value=s==='Total'?'':s;renderProspects()}function rel(t){if(!t)return'No approach yet';let sec=(Date.now()-new Date(t))/1000,U=[['year',31536000],['month',2592000],['week',604800],['day',86400],['hour',3600],['minute',60]];if(sec<60)return'Just now';for(let[u,v]of U)if(sec>=v){let n=Math.floor(sec/v);return n+' '+u+(n>1?'s':'')+' ago'}}function renderProspects(){let show=adm()&&fa.value==='ALL';th.innerHTML=(show?['Agent']:[]).concat(['Client / Approach','Status','Occupation','Plan','APE','Source','Mobile','Remarks','Actions']).map(x=>`<th>${x}</th>`).join('');tb.innerHTML=filtered().map(x=>`<tr>${show?`<td>${x.agentName}</td>`:''}<td><b>${x.name}</b><div class="quick"><button onclick="approach('${x.id}','chat')">💬</button><button onclick="approach('${x.id}','email')">✉️</button><b>${x.count||0}</b></div><div class="muted">${rel(x.last)}</div></td><td><select onchange="statusChange('${x.id}',this.value)">${ST.map(s=>`<option ${s===x.status?'selected':''}>${s}</option>`).join('')}</select></td><td>${x.occ||'-'}</td><td>${x.plan||'-'}</td><td>${money(x.status==='Closed'?(x.finalApe||x.ape):x.ape)}</td><td>${x.source}</td><td>${x.mobile||'-'}</td><td><textarea onblur="remark('${x.id}',this.value)">${x.remarks||''}</textarea></td><td><button class="btn sec" onclick="openPros('${x.id}')">Edit</button> <button class="btn danger" onclick="del('${x.id}')">Delete</button></td></tr>`).join('')||'<tr><td colspan="10">No prospects.</td></tr>'}function openPros(i=''){let x=S.p.find(p=>p.id===i);pid.value=x?.id||'';pn.value=x?.name||'';pmob.value=x?.mobile||'';pe.value=x?.email||'';pl.value=x?.link||'';po.value=x?.occ||'';ps.value=x?.source||'Facebook';pst.value=x?.status||'Approach';pp.value=x?.plan||'';pa.value=x?.ape||'';pr.value=x?.remarks||'';pm.classList.remove('hide')}function closeM(i){document.getElementById(i).classList.add('hide')}function savePros(){if(!pn.value.trim())return alert('Client name is required. You can complete the other details later.');let x=S.p.find(p=>p.id===pid.value),old=x?.status;if(!x){x={id:id('P'),agentId:S.me.id,agentName:S.me.name,dateAdded:new Date().toISOString(),count:0};S.p.push(x)}Object.assign(x,{name:pn.value.trim(),mobile:pmob.value,email:pe.value,link:pl.value,occ:po.value,source:ps.value||'Other',status:pst.value||'Approach',plan:pp.value,ape:+pa.value||0,remarks:pr.value});if(old&&old!==x.status)S.h.push({id:id('H'),prospectId:x.id,from:old,to:x.status,date:new Date().toISOString(),agentId:S.me.id});save();closeM('pm');render()}function approach(i,t){let x=S.p.find(p=>p.id===i);x.count=(x.count||0)+1;x.last=new Date().toISOString();save();renderProspects();if(t==='chat'&&x.link)open(x.link,'_blank');if(t==='email'&&x.email)open('https://mail.google.com/mail/?view=cm&fs=1&to='+encodeURIComponent(x.email),'_blank')}function statusChange(i,v){let x=S.p.find(p=>p.id===i);if(v==='Setting Appointment'){apid.value=i;am.classList.remove('hide');return}if(v==='Closed'){cpid.value=i;cd.value=new Date().toISOString().slice(0,10);ca.value=x.ape;cpo.value=x.policy||'';cm.classList.remove('hide');return}let o=x.status;x.status=v;S.h.push({id:id('H'),prospectId:i,from:o,to:v,date:new Date().toISOString(),agentId:S.me.id});save();render()}function autoEnd(){let[h,m]=as.value.split(':').map(Number),d=new Date(2000,0,1,h,m+90);ae.value=d.toTimeString().slice(0,5)}function saveAppt(){if(!ad.value||!as.value||!ae.value)return alert('Date and time required.');let x=S.p.find(p=>p.id===apid.value),o=x.status;x.status='Setting Appointment';S.c.push({id:id('C'),prospectId:x.id,agentId:x.agentId,agentName:x.agentName,date:ad.value,start:as.value,end:ae.value,title:'Client Meeting with '+x.name,entryType:'Client Meeting',type:at.value,location:al.value});S.h.push({id:id('H'),prospectId:x.id,from:o,to:x.status,date:new Date().toISOString(),agentId:S.me.id});save();closeM('am');render()}function saveClose(){if(!cd.value||!ca.value)return alert('Closing date and final APE required.');let x=S.p.find(p=>p.id===cpid.value),o=x.status;Object.assign(x,{status:'Closed',closingDate:cd.value,finalApe:+ca.value,policy:cpo.value});S.h.push({id:id('H'),prospectId:x.id,from:o,to:'Closed',date:new Date().toISOString(),agentId:S.me.id});save();closeM('cm');render()}function remark(i,v){S.p.find(x=>x.id===i).remarks=v;save()}function del(i){if(confirm('Delete prospect?')){S.p=S.p.filter(x=>x.id!==i);save();render()}}const TASK_COLORS=['#1e66d0','#16a05d','#d58a13','#e54b8a','#7a4bc2'];
+function calendarColor(type,x){return x?.color||(type==='Training'?'#7a4bc2':type==='Birthday'?'#e54b8a':type==='To-do'?'#d58a13':type==='Other'?'#1e66d0':'#16a05d')}
+function setupCalendarAgentControls(){
+ if(!S.me)return;if(!adm()){S.calVisible=new Set([S.me.id]);calendarAgentControls.innerHTML='';return}
+ if(!S.calVisible.size)S.calVisible.add(S.me.id);
+ let users=S.u.filter(x=>x.status==='Active');calendarAgentControls.innerHTML=users.map(x=>`<button class="agent-toggle ${S.calVisible.has(x.id)?'on':''}" onclick="toggleCalendarAgent('${x.id}')"><span class="circle"></span>${x.name}${x.id===S.me.id?' (Me)':''}</button>`).join('')}
+function toggleCalendarAgent(id){if(S.calVisible.has(id))S.calVisible.delete(id);else S.calVisible.add(id);setupCalendarAgentControls();renderCal()}
+const CAL_TYPES=['Client Meeting','To-do','Training','Birthday','Other'];
+function setupCalendarTypeControls(){if(!S.calTypes||!S.calTypes.size)S.calTypes=new Set(CAL_TYPES);calendarTypeControls.innerHTML=CAL_TYPES.map(t=>`<button class="type-toggle ${S.calTypes.has(t)?'on':''}" style="color:${calendarColor(t)}" onclick="toggleCalendarType('${t}')"><span class="circle"></span>${t}</button>`).join('')}
+function toggleCalendarType(t){if(S.calTypes.has(t))S.calTypes.delete(t);else S.calTypes.add(t);setupCalendarTypeControls();renderCal()}
+function initTaskColors(){taskColors.innerHTML=TASK_COLORS.map(c=>`<button type="button" class="color-choice ${taskColor.value===c?'on':''}" style="background:${c}" onclick="selectTaskColor('${c}')"></button>`).join('')}
+function selectTaskColor(c){taskColor.value=c;initTaskColors()}
+function visibleCalendarItems(){return S.c.filter(x=>S.calVisible.has(x.agentId)&&S.calTypes.has(x.entryType||'Other'))}
+function clearTaskForm(){editEventId.value='';taskFormTitle.textContent='Encode Task';meti.value='';met.value='To-do';med.value='';mes.value='';mee.value='';mer.value='No Repeat';men.value='';showCalendar.checked=true;taskColor.value='#1e66d0';deleteTaskBtn.classList.add('hide');addGoogleCalendarBtn.classList.add('hide');fillAssignedAgents();initTaskColors()}
+function fillAssignedAgents(){let users=adm()?S.u.filter(x=>x.status==='Active'):[S.me];mea.innerHTML=users.map(x=>`<option value="${x.id}" ${x.id===S.me.id?'selected':''}>${x.name}</option>`).join('')}
+function openCalendarTask(id){let x=S.c.find(e=>e.id===id);if(!x)return;editEventId.value=x.id;taskFormTitle.textContent=x.entryType==='Client Meeting'?'Edit Client Meeting':'Edit Task';meti.value=x.title||'';met.value=['To-do','Training','Birthday','Other'].includes(x.entryType)?x.entryType:'To-do';med.value=x.date||'';mes.value=x.start||'';mee.value=x.end||'';mer.value=x.repeat||'No Repeat';men.value=x.notes||x.location||'';showCalendar.checked=x.showOnCalendar!==false;taskColor.value=calendarColor(x.entryType,x);fillAssignedAgents();mea.value=x.agentId;deleteTaskBtn.classList.remove('hide');addGoogleCalendarBtn.classList.remove('hide');initTaskColors();document.getElementById('cal').scrollIntoView({behavior:'smooth',block:'start'})}
+function saveManualEvent(){if(!meti.value.trim())return alert('Task title is required.');let u=S.u.find(x=>x.id===mea.value)||S.me,x=S.c.find(e=>e.id===editEventId.value);if(x&&x.entryType==='Client Meeting'){x.title=meti.value.trim();x.date=med.value;x.start=mes.value;x.end=mee.value;x.notes=men.value;x.location=men.value;x.color=taskColor.value;x.showOnCalendar=true}else if(x){Object.assign(x,{agentId:u.id,agentName:u.name,date:med.value,start:mes.value,end:mee.value,title:meti.value.trim(),entryType:met.value,notes:men.value,location:men.value,repeat:mer.value,color:taskColor.value,showOnCalendar:showCalendar.checked})}else{S.c.push({id:id('C'),agentId:u.id,agentName:u.name,date:med.value,start:mes.value,end:mee.value,title:meti.value.trim(),entryType:met.value,notes:men.value,location:men.value,repeat:mer.value,color:taskColor.value,showOnCalendar:showCalendar.checked,done:false})}save();if(adm())S.calVisible.add(u.id);clearTaskForm();renderCal()}
+function deleteCalendarTask(){let x=S.c.find(e=>e.id===editEventId.value);if(!x)return;if(x.entryType==='Client Meeting'&&!confirm('Delete this client meeting from calendar? The prospect record will remain.'))return;if(x.entryType!=='Client Meeting'&&!confirm('Delete this task?'))return;S.c=S.c.filter(e=>e.id!==x.id);save();clearTaskForm();renderCal()}
+function toggleTaskDone(id,done){let x=S.c.find(e=>e.id===id);if(!x)return;x.done=done;save();renderCal()}
+function googleCalendarUrl(x){
+ let title=x.title||'Calendar Event',date=x.date||'',details=x.notes||'',location=x.location||'';
+ if(!date)return '';
+ let clean=date.replaceAll('-',''),dates='';
+ if(x.start){
+   let st=(x.start||'00:00').replace(':','')+'00',en=(x.end||x.start||'00:00').replace(':','')+'00';
+   dates=clean+'T'+st+'/'+clean+'T'+en;
+ }else{
+   let d=new Date(date+'T00:00:00');d.setDate(d.getDate()+1);let end=d.toISOString().slice(0,10).replaceAll('-','');dates=clean+'/'+end;
+ }
+ return 'https://calendar.google.com/calendar/render?action=TEMPLATE&text='+encodeURIComponent(title)+'&dates='+dates+'&details='+encodeURIComponent(details)+'&location='+encodeURIComponent(location);
+}
+function openGoogleCalendar(id){let x=S.c.find(e=>e.id===id);if(!x)return;let u=googleCalendarUrl(x);if(!u)return alert('Please add a date before opening Google Calendar.');window.open(u,'_blank')}
+function addCurrentTaskToGoogleCalendar(){let x=S.c.find(e=>e.id===editEventId.value);if(x)return openGoogleCalendar(x.id);if(!meti.value.trim()||!med.value)return alert('Add a title and date first.');let u=googleCalendarUrl({title:meti.value.trim(),date:med.value,start:mes.value,end:mee.value,notes:men.value,location:men.value});window.open(u,'_blank')}
+function renderTaskLists(){let items=visibleCalendarItems().sort((a,b)=>(a.date||'9999').localeCompare(b.date||'9999')||(a.start||'').localeCompare(b.start||''));let active=items.filter(x=>!x.done),done=items.filter(x=>x.done);currentTaskList.innerHTML=active.map(taskRow).join('')||'<div class="task-empty">No current task.</div>';doneTaskList.innerHTML=done.map(x=>taskRow(x,true)).join('')||'<div class="task-empty">No done task yet.</div>'}
+function taskRow(x,isDone=false){let c=calendarColor(x.entryType,x),meta=[x.date||'No date',x.start?(x.start+(x.end?' - '+x.end:'')):'',x.agentName||'',x.showOnCalendar===false?'To-do list only':'Calendar'].filter(Boolean).join(' • ');return `<div class="task-item ${isDone?'done-item':''}" onclick="openCalendarTask('${x.id}')"><input type="checkbox" ${x.done?'checked':''} onclick="event.stopPropagation();toggleTaskDone('${x.id}',this.checked)"><div><div class="task-title"><span class="task-dot" style="display:inline-block;background:${c}"></span> ${x.title}</div><div class="task-meta">${meta}</div></div><div class="task-actions"><button class="google-cal-btn" onclick="event.stopPropagation();openGoogleCalendar('${x.id}')">Google Calendar</button><button class="btn sec" onclick="event.stopPropagation();openCalendarTask('${x.id}')">Edit</button></div></div>`}
+function monthItemsFor(date){return visibleCalendarItems().filter(x=>x.showOnCalendar!==false&&x.date===date&&!x.done)}
+function renderMonthCalendar(){let d=S.calDate||new Date(),y=d.getFullYear(),m=d.getMonth();calTitle.innerHTML=`${d.toLocaleString('en',{month:'long'}).toUpperCase()} ${y}<small>MONTH & YEAR</small>`;let first=new Date(y,m,1),start=new Date(y,m,1-first.getDay()),today=new Date().toISOString().slice(0,10),html='';for(let i=0;i<42;i++){let day=new Date(start);day.setDate(start.getDate()+i);let iso=day.toISOString().slice(0,10),other=day.getMonth()!==m,events=monthItemsFor(iso);html+=`<div class="cal-day ${other?'other':''} ${iso===today?'today':''}"><div class="day-num">${day.getDate()}</div>${events.map(x=>`<div class="cal-event" style="background:${calendarColor(x.entryType,x)}22;border-color:${calendarColor(x.entryType,x)}55;color:${iso===today?'#fff':'#10233f'}" onclick="openCalendarTask('${x.id}')">${x.entryType==='Birthday'?'🎂 ':x.entryType==='Training'?'🎓 ':x.entryType==='To-do'?'✓ ':x.entryType==='Client Meeting'?'● ':''}${x.title}${x.start?`<small>${x.start}${x.end?' - '+x.end:''}</small>`:''}</div>`).join('')}</div>`}calendarView.innerHTML=html}
+function moveCal(n){if(!S.calDate)S.calDate=new Date();S.calDate=new Date(S.calDate.getFullYear(),S.calDate.getMonth()+n,1);renderMonthCalendar()}
+function goToday(){S.calDate=new Date();renderMonthCalendar()}
+function renderCal(){setupCalendarAgentControls();setupCalendarTypeControls();fillAssignedAgents();initTaskColors();renderTaskLists();renderMonthCalendar()}
+function initCalendar(){if(!S.calDate)S.calDate=new Date();renderCal()}
+function charts(){let M=Array.from({length:12},(_,i)=>new Date(2000,i).toLocaleString('en',{month:'short'})),b=mine(),A=M.map((_,i)=>b.filter(x=>new Date(x.dateAdded).getMonth()===i).length),D=M.map((_,i)=>S.h.filter(x=>x.to==='Done Client Meeting'&&new Date(x.date).getMonth()===i&&(adm()||x.agentId===S.me.id)).length),F=M.map((_,i)=>S.h.filter(x=>x.to==='For Closing'&&new Date(x.date).getMonth()===i&&(adm()||x.agentId===S.me.id)).length),C=M.map((_,i)=>b.filter(x=>x.status==='Closed'&&x.closingDate&&new Date(x.closingDate).getMonth()===i).reduce((s,x)=>s+(+x.finalApe||0),0));S.ch.p?.destroy();S.ch.a?.destroy();S.ch.p=new Chart(pc,{type:'line',data:{labels:M,datasets:[{label:'Approach',data:A},{label:'Done Meeting',data:D},{label:'For Closing',data:F}]},options:{responsive:true,maintainAspectRatio:false}});S.ch.a=new Chart(ac,{type:'bar',data:{labels:M,datasets:[{label:'Closed APE',data:C}]},options:{responsive:true,maintainAspectRatio:false}})}function openAgent(){aum.classList.remove('hide')}function saveAgent(){let name=an.value.trim(),user=au.value.trim().toLowerCase();if(!name||!user||!ap.value)return alert('Name, username, and password required.');if(S.u.some(x=>(x.username||'').toLowerCase()===user))return alert('Username already exists.');S.u.push({id:id('U'),name,username:user,pass:ap.value,email:ae2.value,mobile:amo.value,role:ar.value,status:'Active'});save();closeM('aum');renderAgents()}
+function renderAgents(){
+  if(!adm())return;
+  S.u.forEach(x=>{if(!x.accessToken)x.accessToken=secureToken()});
+  agents.innerHTML=S.u.map(x=>{
+    const link=agentAccessLink(x);
+    return `<div class="agentrow">
+      <div><b>${x.name}</b><div class="muted">@${x.username||'-'}</div></div>
+      <span>${x.role}</span>
+      <span>${x.status}</span>
+      <div class="agent-actions">
+        <div class="agent-action-row">
+          <button class="btn sec agent-equal" onclick="toggleAgent('${x.id}')">${x.status==='Active'?'Deactivate':'Activate'}</button>
+          <button class="btn danger agent-equal" onclick="rmAgent('${x.id}')">Delete</button>
+        </div>
+        <div class="agent-link-line">
+          <input value="${link}" readonly onclick="this.select()">
+          <button class="btn pri agent-equal" onclick="copyAgentLink('${x.id}')">Copy Link</button>
+        </div>
+        <div class="agent-action-row">
+          <button class="btn sec agent-equal" onclick="openAgentLink('${x.id}')">Open Link</button>
+          <button class="btn sec agent-equal" onclick="regenerateAgentLink('${x.id}')">Regenerate</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+  save();
+}
+function toggleAgent(i){let x=S.u.find(x=>x.id===i);if(!x)return;if(i===S.me.id&&x.status==='Active')return alert('You cannot deactivate your current account.');x.status=x.status==='Active'?'Inactive':'Active';save();renderAgents()}
+function rmAgent(i){if(i===S.me.id)return alert('You cannot delete your current account.');if(confirm('Delete account?')){S.u=S.u.filter(x=>x.id!==i);save();renderAgents()}}
+function secureToken(){
+  try{
+    const a=new Uint32Array(4);crypto.getRandomValues(a);return Array.from(a,x=>x.toString(36)).join('');
+  }catch(e){return Date.now().toString(36)+Math.random().toString(36).slice(2)+Math.random().toString(36).slice(2)}
+}
+function agentAccessLink(user){
+  const base=location.href.split('?')[0].split('#')[0];
+  const q=new URLSearchParams();
+  const api=getApiUrl();
+  if(api)q.set('api',api);
+  q.set('access',user.accessToken||'');
+  return base+'?'+q.toString();
+}
+function copyAgentLink(i){
+  const x=S.u.find(u=>u.id===i);if(!x)return;
+  const link=agentAccessLink(x);
+  const done=()=>alert('Agent link copied.');
+  if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(link).then(done).catch(()=>fallbackCopy(link));
+  else fallbackCopy(link);
+}
+function fallbackCopy(text){
+  const t=document.createElement('textarea');t.value=text;t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);t.select();document.execCommand('copy');t.remove();alert('Agent link copied.');
+}
+function openAgentLink(i){const x=S.u.find(u=>u.id===i);if(x)window.open(agentAccessLink(x),'_blank')}
+function regenerateAgentLink(i){const x=S.u.find(u=>u.id===i);if(!x)return;if(confirm('Generate a new agent link? The old link will stop working.')){x.accessToken=secureToken();save();renderAgents()}}
+function logout(){
+  S.me=null;localStorage.removeItem(K.s);localStorage.removeItem(K.apiSession);app.classList.add('hide');login.classList.remove('hide');lp.value='';setSyncState('Local','');
+}
+const APP_SCRIPT_CODE="const N={u:'Users',p:'Prospects',g:'MonthlyGoals',c:'Calendar',h:'StatusHistory'};function doGet(){return out({ok:true,app:'JOSH PRISM'})}function doPost(e){try{let q=JSON.parse(e.postData.contents||'{}');setup();if(q.action==='ping')return out({ok:true});if(q.action==='syncAll')return out({ok:true,data:{users:read(N.u),prospects:read(N.p),goals:read(N.g),calendar:read(N.c),history:read(N.h)}});if(q.action==='save')return saveRow(q.sheet,q.payload);return out({ok:false,error:'Unknown action'})}catch(err){return out({ok:false,error:String(err)})}}function setup(){let ss=SpreadsheetApp.getActive(),D={Users:['id','name','pass','role','status'],Prospects:['id','agentId','agentName','dateAdded','name','mobile','email','link','occ','source','status','plan','ape','finalApe','remarks','count','last','closingDate','policy'],MonthlyGoals:['id','agentId','m','y','goal','ratio','basis'],Calendar:['id','prospectId','agentId','agentName','date','start','end','title','type','location'],StatusHistory:['id','prospectId','agentId','from','to','date']};Object.keys(D).forEach(n=>{let s=ss.getSheetByName(n)||ss.insertSheet(n);if(!s.getLastRow())s.appendRow(D[n])})}function read(n){let s=SpreadsheetApp.getActive().getSheetByName(n),v=s.getDataRange().getValues();if(v.length<2)return[];let h=v[0];return v.slice(1).filter(r=>r.some(x=>x!=='')) .map(r=>Object.fromEntries(h.map((x,i)=>[x,r[i]])))}function saveRow(n,o){let s=SpreadsheetApp.getActive().getSheetByName(n),v=s.getDataRange().getValues(),h=v[0],i=h.indexOf('id'),row=h.map(k=>o[k]??''),rn=-1;for(let r=1;r<v.length;r++)if(String(v[r][i])===String(o.id)){rn=r+1;break}rn>0?s.getRange(rn,1,1,h.length).setValues([row]):s.appendRow(row);return out({ok:true})}function out(o){return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON)}";
+function copyAppScript(){if(!navigator.clipboard){let t=document.createElement('textarea');t.value=APP_SCRIPT_CODE;document.body.appendChild(t);t.select();document.execCommand('copy');t.remove();un.textContent='Apps Script copied.';return}navigator.clipboard.writeText(APP_SCRIPT_CODE).then(()=>un.textContent='Apps Script copied.').catch(e=>un.textContent='Copy failed: '+e.message)}
+function saveUrl(){localStorage.setItem(K.url,url.value.trim());un.textContent='Saved. Agent links will include this shared database URL.';setSyncState('Ready','')}async function testUrl(){try{const api=url.value.trim();if(!api)throw new Error('Enter the Web App URL first.');let r=await fetch(api,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'ping'})});let j=await r.json();un.textContent=j.ok?'Connected.':'Failed.'}catch(e){un.textContent=e.message}}function exportCSV(){
+  let H=['Agent','Client','Mobile','Email','Link','Occupation','Source','Status','Plan','APE','Final APE','Approach Count','Last Approach','Closing Date','Policy','Remarks'];
+  let R=filtered().map(x=>[x.agentName,x.name,x.mobile,x.email,x.link,x.occ,x.source,x.status,x.plan,x.ape,x.finalApe||'',x.count||0,x.last||'',x.closingDate||'',x.policy||'',x.remarks||'']);
+  let csv=[H,...R].map(r=>r.map(v=>'"'+String(v??'').replaceAll('"','""')+'"').join(',')).join('\n');
+  let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='JOSH_PRISM_PROSPECTS.csv';a.click();
+}
+function importCSV(){
+  let f=file.files[0];if(!f)return alert('Choose CSV.');
+  let r=new FileReader();
+  r.onload=()=>{
+    let lines=String(r.result||'').split(/\r?\n/).filter(Boolean);
+    if(!lines.length)return;
+    let h=lines.shift().split(',').map(x=>x.replaceAll('"','').trim()),n=0;
+    for(let line of lines){
+      let v=line.match(/("[^"]*(?:""[^"]*)*"|[^,]+)/g)?.map(x=>x.replace(/^"|"$/g,'').replaceAll('""','"'))||[];
+      let o=Object.fromEntries(h.map((k,i)=>[k,v[i]||''])),name=o['Client Name']||o['Name'];
+      if(!name)continue;
+      S.p.push({id:id('P'),agentId:S.me.id,agentName:S.me.name,dateAdded:new Date().toISOString(),name,mobile:o['Mobile']||o['Mobile Number']||'',email:o['Email']||'',link:o['Link']||'',occ:o['Occupation']||'',source:o['Source']||'Other',status:o['Status']||'Approach',plan:o['Plan']||'',ape:+(o['APE']||o['Estimated APE']||0),remarks:o['Remarks']||'',count:0});n++;
+    }
+    save();render();ip.innerHTML='<p class="pos">'+n+' imported.</p>';
+  };
+  r.readAsText(f);
+}
+function brandObj(){return JSON.parse(localStorage.getItem(K.brand)||'null')||{name:'JOSH PRISM',logo:'',c1:'#10233f',c2:'#1e66d0',c3:'#c79a2b'}}
+function applyBrand(){let b=brandObj();document.documentElement.style.setProperty('--n',b.c1);document.documentElement.style.setProperty('--b',b.c2);document.documentElement.style.setProperty('--a',b.c3);[setupNameTitle,loginName,sideName].forEach(x=>x&&(x.textContent=b.name));document.title=b.name;bn.value=b.name;bc1.value=b.c1;bc2.value=b.c2;bc3.value=b.c3;[loginLogo,sideLogo,bp].forEach(x=>{if(b.logo){x.src=b.logo;x.classList.remove('hide')}else x.classList.add('hide')})}
+function logoPreview(){let f=bl.files[0];if(!f)return;let r=new FileReader;r.onload=()=>{bp.src=r.result;bp.classList.remove('hide');if(bac.checked)extractColors(r.result)};r.readAsDataURL(f)}
+function extractColors(src){let im=new Image;im.onload=()=>{let c=document.createElement('canvas'),x=c.getContext('2d');c.width=c.height=64;x.drawImage(im,0,0,64,64);let d=x.getImageData(0,0,64,64).data,m={};for(let i=0;i<d.length;i+=16){if(d[i+3]<180)continue;let r=Math.round(d[i]/32)*32,g=Math.round(d[i+1]/32)*32,b=Math.round(d[i+2]/32)*32;if(r>235&&g>235&&b>235)continue;let k=[Math.min(r,255),Math.min(g,255),Math.min(b,255)].join(',');m[k]=(m[k]||0)+1}let cs=Object.entries(m).sort((a,b)=>b[1]-a[1]).slice(0,3).map(z=>'#'+z[0].split(',').map(v=>(+v).toString(16).padStart(2,'0')).join(''));if(cs[0])bc1.value=cs[0];if(cs[1])bc2.value=cs[1];if(cs[2])bc3.value=cs[2]};im.src=src}
+function saveBrand(){let old=brandObj(),f=bl.files[0],commit=logo=>{localStorage.setItem(K.brand,JSON.stringify({name:bn.value.trim()||'JOSH PRISM',logo:logo||old.logo,c1:bc1.value,c2:bc2.value,c3:bc3.value}));applyBrand();bmsg.innerHTML='<span class="pos">Branding saved.</span>'};if(f){let r=new FileReader;r.onload=()=>commit(r.result);r.readAsDataURL(f)}else commit(old.logo)}
+function resetBrand(){localStorage.removeItem(K.brand);applyBrand();bmsg.innerHTML='<span class="pos">Branding reset.</span>'}
+function render(){renderDash();renderProspects();renderCal();if(adm())renderAgents()}
+load();
+applyBrand();
+url.value=getApiUrl();
+(async function start(){
+  const api=getApiUrl();
+  const access=new URLSearchParams(location.search).get('access');
+  if(api&&access){
+    try{
+      const response=await fetch(api+'?action=resolveInvite&token='+encodeURIComponent(access));
+      const result=await response.json();
+      inviteBanner.classList.remove('hide');
+      if(result.ok){
+        lu.value=result.user.username||'';
+        inviteBanner.textContent='Agent portal for '+result.user.name+'. Enter your password.';
+      }else{
+        inviteBanner.textContent=result.error||'Invalid access link.';
+      }
+    }catch(error){
+      inviteBanner.classList.remove('hide');
+      inviteBanner.textContent='Unable to verify this access link.';
+    }
+  }
+  const localSession=localStorage.getItem(K.s);
+  const localUser=S.u.find(x=>x.id===localSession&&x.status==='Active');
+  if(localUser&&!api){
+    S.me=localUser;
+    show();
+  }else{
+    login.classList.remove('hide');
+  }
+})();
+</script></body></html>
