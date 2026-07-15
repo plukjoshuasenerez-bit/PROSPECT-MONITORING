@@ -1232,7 +1232,7 @@ html,body{max-width:100%;overflow-x:hidden!important}
 </style></head><body>
 <div id="setup" class="login hide"><div class="box"><h1 id="setupNameTitle">JOSH PRISM</h1><p>First-Time Administrator Setup</p><div class="field"><label>FULL NAME</label><input id="sun"></div><div class="field"><label>USERNAME</label><input id="suu"></div><div class="field"><label>EMAIL</label><input id="sue" type="email"></div><div class="field"><label>MOBILE</label><input id="sum"></div><div class="field"><label>PASSWORD</label><input id="sup" type="password"></div><div class="field"><label>CONFIRM PASSWORD</label><input id="suc" type="password"></div><button class="btn pri" style="width:100%" onclick="createAdmin()">Create Administrator</button><div id="sn"></div></div></div>
 <div id="login" class="login hide"><div class="box"><div style="display:flex;gap:12px;align-items:center"><img id="loginLogo" class="hide" style="width:82px;height:62px;object-fit:contain"><div><h1 id="loginName">JOSH PRISM</h1><p>Prospect Tracker</p></div></div><div class="field"><label>USERNAME</label><input id="lu"></div><div class="field"><label>PASSWORD</label><input id="lp" type="password"></div><button class="btn pri" style="width:100%" onclick="doLogin()">Login</button><div id="ln"></div></div></div>
-<div id="app" class="app hide"><aside class="side"><img id="sideLogo" class="hide" style="width:190px;max-width:100%;height:95px;object-fit:contain;margin-bottom:12px;background:#fff;border-radius:12px;padding:6px"><h2 id="sideName">JOSH PRISM</h2><small>Prospect Tracker</small><p><b id="who"></b><br><small id="role"></small></p><div class="nav"><button class="on" data-p="dash">Dashboard</button><button data-p="pros">Prospects</button><button data-p="cal">Calendar</button><button data-p="ana">Analytics</button><button id="impnav" class="admin-only" data-p="imp">Import</button><button id="setnav" class="admin-only" data-p="set">Settings</button><button onclick="logout()">Logout</button></div></aside><main class="main"><div class="top"><div><h1 id="title">Dashboard</h1><p class="muted">Monthly goal and pipeline monitoring</p></div><button class="btn pri" onclick="openPros()">+ Add Prospect</button></div>
+<div id="app" class="app hide"><aside class="side"><img id="sideLogo" class="hide" style="width:190px;max-width:100%;height:95px;object-fit:contain;margin-bottom:12px;background:#fff;border-radius:12px;padding:6px"><h2 id="sideName">JOSH PRISM</h2><small>Prospect Tracker</small><p><b id="who"></b><br><small id="role"></small></p><div class="nav"><button class="on" data-p="dash">Dashboard</button><button data-p="pros">Prospects</button><button data-p="cal">Calendar</button><button data-p="ana">Analytics</button><button id="impnav" class="admin-only" data-p="imp">Import</button><button id="setnav" class="admin-only" data-p="set">Settings</button><button onclick="logout()">Logout</button></div></aside><main class="main"><div class="top"><div><h1 id="title">Dashboard</h1><p class="muted">Monthly goal and pipeline monitoring</p></div></div>
 <section id="dash" class="panel on">
 <div class="card"><h3>Monthly Goal Setup</h3><div class="form"><div class="field"><label>MONTHLY APE GOAL</label><input id="goal" type="number"></div><div class="field"><label>CLOSING RATIO (%)</label><input id="ratio" type="number"></div><div class="field"><label>BASIS</label><select id="basis"><option>Manual Closing Ratio</option><option>Last Month</option><option>Average Monthly</option></select></div></div><button id="saveGoalBtn" class="btn pri" onclick="saveGoal()">Save Goal</button><span id="goalMsg" class="muted" style="margin-left:10px"></span></div><div id="kpis" class="grid kpis"></div><div id="status" class="grid status"></div>
 <div id="adminGoalOverview" class="card admin-only">
@@ -1266,6 +1266,13 @@ html,body{max-width:100%;overflow-x:hidden!important}
 </section>
 
 <section id="pros" class="panel">
+  <div class="card" style="display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap">
+    <div><h3 style="margin:0">Prospect List</h3><p class="muted" style="margin:4px 0 0">I-add manually o mag-upload ng CSV / PDF file ng listahan.</p></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn pri" onclick="openPros()">+ Add Prospect</button>
+      <button class="btn sec" onclick="openUpload()">&#11014; Upload CSV / PDF</button>
+    </div>
+  </div>
   <div class="card">
     <div class="filters">
       <input id="fs" placeholder="Search client">
@@ -1370,12 +1377,20 @@ html,body{max-width:100%;overflow-x:hidden!important}
 </div>
 </section>
 <section id="ana" class="panel"><div class="grid charts"><div class="card"><h3>Monthly Pipeline</h3><div class="chart"><canvas id="pc"></canvas></div></div><div class="card"><h3>Closed APE</h3><div class="chart"><canvas id="ac"></canvas></div></div></div></section>
-<section id="imp" class="panel admin-only"><div class="card"><h3>Import CSV</h3><input type="file" id="file" accept=".csv"><button class="btn pri" onclick="importCSV()">Import</button><div id="ip"></div></div></section>
+<section id="imp" class="panel admin-only"><div class="card"><h3>Upload Prospects (CSV / PDF)</h3><p class="muted">Bilang Admin, pwede kang mag-upload <b>para sa lahat ng agents</b> &mdash; bawat isa makakatanggap ng kopya ng listahan. Header format: <b>Client Name, Mobile, Email, Link, Occupation, Source, Status, Plan, Estimated APE, Remarks</b>.</p><button class="btn pri" onclick="openUpload()">&#11014; Open Uploader</button><div id="ip"></div></div></section>
 <section id="set" class="panel admin-only"><div class="grid charts">
 <div class="card"><h3>User Accounts</h3><button class="btn pri" onclick="openAgent()">+ Add Agent</button><div id="agents"></div></div>
 <div class="card"><h3>App Branding</h3><div class="field"><label>APP NAME</label><input id="bn"></div><div class="field"><label>UPLOAD LOGO</label><input id="bl" type="file" accept="image/*" onchange="logoPreview()"></div><img id="bp" class="hide" style="width:120px;height:90px;object-fit:contain;border:1px solid var(--l);border-radius:10px;padding:8px"><p><label><input id="bac" type="checkbox" checked> Auto colorway from logo</label></p><div class="form"><div class="field"><label>PRIMARY</label><input id="bc1" type="color"></div><div class="field"><label>SECONDARY</label><input id="bc2" type="color"></div><div class="field"><label>ACCENT</label><input id="bc3" type="color"></div></div><button class="btn pri" onclick="saveBrand()">Save Branding</button> <button class="btn sec" onclick="resetBrand()">Reset</button><p id="bmsg"></p></div>
 <div class="card"><h3>Google Apps Script</h3><div class="field"><label>WEB APP URL</label><input id="url" readonly title="Embedded Google Apps Script URL"></div><button class="btn pri" onclick="saveUrl()" style="display:none">Save</button><button class="btn sec" onclick="testUrl()">Test</button><p id="un"></p></div></div></section>
 </main></div>
+<div id="um" class="modal hide"><div class="card" style="width:min(680px,100%)">
+<h3>Upload Prospects (CSV o PDF)</h3>
+<p class="muted">Tamang header: <b>Client Name, Mobile, Email, Link, Occupation, Source, Status, Plan, Estimated APE, Remarks</b>. Pwedeng kulang ang ibang columns basta may <b>Client Name</b>. Optional ang <b>Agent Name</b> column &mdash; kapag Admin ka at pinili ang &ldquo;Base sa Agent Name column&rdquo;, auto-assign sa tamang agent ang bawat row.</p>
+<div class="field"><label>FILE (.csv / .pdf)</label><input type="file" id="upFile" accept=".csv,.pdf,text/csv,application/pdf"></div>
+<div class="field" id="upAssignWrap"><label>I-ASSIGN KAY</label><select id="upAssign"></select></div>
+<button class="btn pri" onclick="doUpload()">Upload</button> <button class="btn sec" onclick="dlTemplate()">Download CSV Template</button> <button class="btn sec" onclick="closeM('um')">Cancel</button>
+<div id="upResult" style="margin-top:10px"></div>
+</div></div>
 <div id="pm" class="modal hide"><div class="card"><h3 id="pmt">Add Prospect</h3><input id="pid" type="hidden"><div class="form"><div class="field"><label>CLIENT NAME</label><input id="pn"></div><div class="field"><label>MOBILE</label><input id="pmob"></div><div class="field"><label>EMAIL</label><input id="pe"></div><div class="field span3"><label>SOCIAL LINK</label><input id="pl"></div><div class="field"><label>OCCUPATION</label><input id="po"></div><div class="field"><label>SOURCE</label><select id="ps"></select></div><div class="field"><label>STATUS</label><select id="pst"></select></div><div class="field"><label>PLAN</label><input id="pp"></div><div class="field"><label>ESTIMATED APE</label><input id="pa" type="number"></div><div class="field span3"><label>REMARKS</label><textarea id="pr"></textarea></div></div><button class="btn pri" onclick="savePros()">Save</button> <button class="btn sec" onclick="closeM('pm')">Cancel</button></div></div>
 <div id="am" class="modal hide"><div class="card" style="width:min(560px,100%)"><h3>Appointment</h3><input id="apid" type="hidden"><div class="form"><div class="field"><label>DATE</label><input id="ad" type="date"></div><div class="field"><label>START</label><input id="as" type="time" onchange="autoEnd()"></div><div class="field"><label>END</label><input id="ae" type="time"></div><div class="field"><label>TYPE</label><select id="at"><option>Online</option><option>Face to Face</option></select></div><div class="field span3"><label>LOCATION/LINK</label><input id="al"></div></div><button class="btn pri" onclick="saveAppt()">Save</button> <button class="btn sec" onclick="closeM('am')">Cancel</button></div></div>
 <div id="cm" class="modal hide"><div class="card" style="width:min(560px,100%)"><h3>Close Prospect</h3><input id="cpid" type="hidden"><div class="form"><div class="field"><label>CLOSING DATE</label><input id="cd" type="date"></div><div class="field"><label>FINAL APE</label><input id="ca" type="number"></div><div class="field"><label>POLICY NUMBER</label><input id="cpo"></div></div><button class="btn pri" onclick="saveClose()">Confirm</button> <button class="btn sec" onclick="closeM('cm')">Cancel</button></div></div>
@@ -1471,23 +1486,213 @@ function rmAgent(i){if(i===S.me.id)return alert('You cannot delete your current 
   let csv=[H,...R].map(r=>r.map(v=>'"'+String(v??'').replaceAll('"','""')+'"').join(',')).join('\n');
   let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='JOSH_PRISM_PROSPECTS.csv';a.click();
 }
-function importCSV(){
-  let f=file.files[0];if(!f)return alert('Choose CSV.');
-  let r=new FileReader();
-  r.onload=()=>{
-    let lines=String(r.result||'').split(/\r?\n/).filter(Boolean);
-    if(!lines.length)return;
-    let h=lines.shift().split(',').map(x=>x.replaceAll('"','').trim()),n=0;
-    for(let line of lines){
-      let v=line.match(/("[^"]*(?:""[^"]*)*"|[^,]+)/g)?.map(x=>x.replace(/^"|"$/g,'').replaceAll('""','"'))||[];
-      let o=Object.fromEntries(h.map((k,i)=>[k,v[i]||''])),name=o['Client Name']||o['Name'];
-      if(!name)continue;
-      S.p.push({id:id('P'),agentId:S.me.id,agentName:S.me.name,dateAdded:new Date().toISOString(),name,mobile:o['Mobile']||o['Mobile Number']||'',email:o['Email']||'',link:o['Link']||'',occ:o['Occupation']||'',source:o['Source']||'Other',status:o['Status']||'Approach',plan:o['Plan']||'',ape:+(o['APE']||o['Estimated APE']||0),remarks:o['Remarks']||'',count:0});n++;
-    }
-    save();render();ip.innerHTML='<p class="pos">'+n+' imported.</p>';
-  };
-  r.readAsText(f);
+/* ================= UPLOAD v2: CSV + PDF, admin multi-assign ================= */
+function esc_(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function aliasKey(hd){
+  const k=String(hd||'').toLowerCase().replace(/[^a-z0-9]/g,'');
+  if(!k)return null;
+  if(['clientname','name','client','fullname','completename'].includes(k))return 'name';
+  if(['mobile','mobilenumber','mobileno','contact','contactno','contactnumber','phone','phonenumber','cell'].includes(k))return 'mobile';
+  if(['email','emailaddress'].includes(k))return 'email';
+  if(['link','sociallink','fblink','fb','facebook','facebooklink','profile','profilelink'].includes(k))return 'link';
+  if(['occupation','occ','work','job','profession'].includes(k))return 'occ';
+  if(['source','src','leadsource'].includes(k))return 'source';
+  if(['status','stage'].includes(k))return 'status';
+  if(['plan','product'].includes(k))return 'plan';
+  if(['estimated','estimatedape','ape','estimate','estimatedvalue','estape','amount'].includes(k))return 'ape';
+  if(['remarks','remark','notes','note','comments','comment'].includes(k))return 'remarks';
+  if(['agent','agentname','assignedagent','assignedto','advisor','fa','faname'].includes(k))return 'agent';
+  return null;
 }
+function normPick(v,list,dflt){v=String(v||'').trim().toLowerCase();const hit=list.find(x=>x.toLowerCase()===v);return hit||dflt;}
+function parseCSVFull(text){
+  text=String(text||'').replace(/^\uFEFF/,'');
+  const rows=[];let row=[],cur='',q=false;
+  for(let i=0;i<text.length;i++){
+    const ch=text[i];
+    if(q){ if(ch==='"'){ if(text[i+1]==='"'){cur+='"';i++;} else q=false; } else cur+=ch; }
+    else{
+      if(ch==='"')q=true;
+      else if(ch===','){row.push(cur);cur='';}
+      else if(ch==='\n'||ch==='\r'){ if(ch==='\r'&&text[i+1]==='\n')i++; row.push(cur);cur=''; if(row.some(c=>String(c).trim()!==''))rows.push(row); row=[]; }
+      else cur+=ch;
+    }
+  }
+  row.push(cur); if(row.some(c=>String(c).trim()!==''))rows.push(row);
+  return rows;
+}
+function loadPdfJs(){
+  return new Promise((res,rej)=>{
+    if(window.pdfjsLib)return res(window.pdfjsLib);
+    const s=document.createElement('script');
+    s.src='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+    s.onload=()=>{try{window.pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';res(window.pdfjsLib);}catch(e){rej(e);}};
+    s.onerror=()=>rej(new Error('Hindi ma-load ang PDF reader. Kailangan ng internet connection para sa PDF upload; o i-save ang file bilang CSV.'));
+    document.head.appendChild(s);
+  });
+}
+async function parsePDFRows(file){
+  const pdfjs=await loadPdfJs();
+  const buf=await file.arrayBuffer();
+  const doc=await pdfjs.getDocument({data:buf}).promise;
+  const out=[];let cols=null;
+  for(let p=1;p<=doc.numPages;p++){
+    const page=await doc.getPage(p);
+    const tc=await page.getTextContent();
+    const items=tc.items.map(it=>({s:String(it.str||'').trim(),x:it.transform[4],y:it.transform[5]})).filter(it=>it.s);
+    const rows=[];
+    for(const it of items){
+      let r=rows.find(r=>Math.abs(r.y-it.y)<3.5);
+      if(!r){r={y:it.y,cells:[]};rows.push(r);}
+      r.cells.push(it);
+    }
+    rows.sort((a,b)=>b.y-a.y);
+    for(const r of rows){
+      r.cells.sort((a,b)=>a.x-b.x);
+      const joined=r.cells.map(c=>c.s).join(' ').toLowerCase();
+      if(joined.replace(/[^a-z]/g,'').includes('clientname')||(!cols&&joined.includes('client')&&joined.includes('name'))){
+        cols=[];
+        for(const c of r.cells){
+          const key=aliasKey(c.s);
+          if(key){
+            if(cols.length&&cols[cols.length-1].key===key&&(c.x-cols[cols.length-1].x)<70)continue;
+            cols.push({x:c.x,key});
+          }
+        }
+        continue;
+      }
+      if(!cols||!r.cells.length)continue;
+      const o={};
+      for(const c of r.cells){
+        let best=null;
+        for(const col of cols){ if(c.x>=col.x-8){ if(!best||col.x>best.x)best=col; } }
+        if(!best)best=cols[0];
+        o[best.key]=(o[best.key]?o[best.key]+' ':'')+c.s;
+      }
+      if(o.name&&aliasKey(o.name)!=='name')out.push(o);
+    }
+  }
+  if(!cols)throw new Error('Hindi makita ang header row (Client Name...) sa PDF. Siguraduhing table format ang PDF, o i-export bilang CSV.');
+  return out;
+}
+function openUpload(){
+  const wrap=document.getElementById('upAssignWrap'),sel=document.getElementById('upAssign');
+  if(adm()){
+    const agents=S.u.filter(u=>u.role!=='Admin');
+    sel.innerHTML='<option value="__BYCOL__">Base sa \u201CAgent Name\u201D column ng file</option>'
+      +'<option value="__ALL__">Lahat ng agents \u2014 kopya bawat isa ('+agents.length+' agents)</option>'
+      +'<option value="__SPLIT__">Hatiin nang pantay sa lahat ng agents</option>'
+      +'<option value="'+esc_(S.me.id)+'">Sa akin ('+esc_(S.me.name)+')</option>'
+      +S.u.filter(u=>u.id!==S.me.id).map(u=>'<option value="'+esc_(u.id)+'">'+esc_(u.name)+(u.role==='Admin'?' (Admin)':'')+'</option>').join('');
+    wrap.style.display='';
+  }else{
+    wrap.style.display='none';
+  }
+  document.getElementById('upResult').innerHTML='';
+  document.getElementById('upFile').value='';
+  document.getElementById('um').classList.remove('hide');
+}
+function dlTemplate(){
+  const csv='Client Name,Mobile,Email,Link,Occupation,Source,Status,Plan,Estimated APE,Remarks,Agent Name\nJuan Dela Cruz,09171234567,juan@email.com,https://facebook.com/juan,Engineer,Referral,Approach,VUL,25000,Sample row - burahin ito,\n';
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
+  a.download='prospect_upload_template.csv';document.body.appendChild(a);a.click();a.remove();
+}
+async function doUpload(){
+  const f=document.getElementById('upFile').files[0];
+  const box=document.getElementById('upResult');
+  if(!f){alert('Pumili muna ng CSV o PDF file.');return;}
+  box.innerHTML='<p class="muted">Binabasa ang file...</p>';
+  let objs=[];
+  try{
+    if(/\.pdf$/i.test(f.name)||f.type==='application/pdf'){
+      objs=await parsePDFRows(f);
+    }else{
+      const text=await f.text();
+      const rows=parseCSVFull(text);
+      if(rows.length<2)throw new Error('Walang data rows sa file.');
+      const keys=rows[0].map(c=>aliasKey(c));
+      if(!keys.includes('name'))throw new Error('Hindi makita ang "Client Name" header. Unang row dapat: Client Name, Mobile, Email, Link, Occupation, Source, Status, Plan, Estimated APE, Remarks.');
+      for(let i=1;i<rows.length;i++){
+        const o={};keys.forEach((k,j)=>{if(k)o[k]=String(rows[i][j]||'').trim();});
+        if(o.name)objs.push(o);
+      }
+    }
+  }catch(e){box.innerHTML='<p class="neg">'+esc_(e.message||e)+'</p>';return;}
+  if(!objs.length){box.innerHTML='<p class="neg">Walang valid na prospect rows na nabasa.</p>';return;}
+
+  let targets=[],split=false,byCol=false,unmatched=0;
+  if(!adm())targets=[S.me];
+  else{
+    const v=document.getElementById('upAssign').value;
+    const agents=S.u.filter(u=>u.role!=='Admin');
+    if(v==='__BYCOL__'){byCol=true;targets=[S.me];}
+    else if(v==='__ALL__')targets=agents.length?agents:[S.me];
+    else if(v==='__SPLIT__'){targets=agents.length?agents:[S.me];split=true;}
+    else targets=[S.u.find(u=>u.id===v)||S.me];
+  }
+  const findAgent=nm=>{
+    nm=String(nm||'').trim().toLowerCase();
+    if(!nm)return null;
+    return S.u.find(u=>u.name.toLowerCase()===nm)
+      ||S.u.find(u=>u.name.toLowerCase().includes(nm)||nm.includes(u.name.toLowerCase()))
+      ||null;
+  };
+  const pairs=[];
+  if(byCol){objs.forEach(o=>{const ag=findAgent(o.agent);if(!ag)unmatched++;pairs.push({o,ag:ag||S.me});});}
+  else if(split){objs.forEach((o,i)=>pairs.push({o,ag:targets[i%targets.length]}));}
+  else{for(const ag of targets){for(const o of objs){pairs.push({o,ag});}}}
+
+  const trim=(s,n)=>String(s||'').slice(0,n);
+  const rows=pairs.map(({o,ag})=>({
+    name:trim(o.name,120),mobile:trim(o.mobile,30),email:trim(o.email,80),link:trim(o.link,300),occ:trim(o.occ,60),
+    source:normPick(o.source,SO,'Other'),status:normPick(o.status,ST,'Approach'),
+    plan:trim(o.plan,60),ape:+(String(o.ape||'').replace(/[^0-9.]/g,''))||0,remarks:trim(o.remarks,250),
+    agentId:ag.id,agentName:trim(ag.name,60)
+  }));
+
+  /* JSONP = GET request, kaya limitado ang URL length. Bumuo ng chunks base sa laki, hindi bilang. */
+  const MAXQ=1500;
+  const chunks=[];let cur=[];
+  for(const r of rows){
+    const test=cur.concat([r]);
+    if(cur.length&&encodeURIComponent(JSON.stringify(test)).length>MAXQ){chunks.push(cur);cur=[r];}
+    else cur=test;
+  }
+  if(cur.length)chunks.push(cur);
+
+  const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+  let imported=0,done=0;
+  try{
+    for(const chunk of chunks){
+      done+=chunk.length;
+      box.innerHTML='<p class="muted">Ina-upload sa Google Sheet: '+done+' ng '+rows.length+'... (huwag isara ang page)</p>';
+      let ok=false,lastErr=null;
+      for(let attempt=1;attempt<=3&&!ok;attempt++){
+        try{
+          const r=await Cloud.call('importProspects',{rows:chunk},25000);
+          imported+=Number(r&&r.imported)||chunk.length;ok=true;
+        }catch(err){lastErr=err;if(attempt<3){box.innerHTML='<p class="muted">Retry '+attempt+'... ('+done+' ng '+rows.length+')</p>';await sleep(1200*attempt);}}
+      }
+      if(!ok)throw lastErr||new Error('Upload failed.');
+      await sleep(150);
+    }
+    await cloudReload();render();
+  }catch(err){box.innerHTML='<p class="neg">Upload sa Google Sheet nabigo: '+esc_(err.message||err)+'<br><span class="muted">Na-upload bago mag-error: '+imported+' rows. Pwede mong i-upload ulit ang natitira.</span></p>';return;}
+
+  const ip=document.getElementById('ip');
+  let msg='\u2705 '+imported+' prospects na-upload sa Google Sheet';
+  if(byCol)msg+=' \u2014 na-assign base sa Agent Name column'+(unmatched?' ('+unmatched+' walang match, napunta sa iyo)':'');
+  else if(split)msg+=' \u2014 hinati sa '+targets.length+' agents';
+  else if(targets.length>1)msg+=' \u2192 '+targets.length+' agents (kopya bawat isa)';
+  else msg+=' \u2192 '+esc_(targets[0].name);
+  msg+='.';
+  box.innerHTML='<p class="pos">'+msg+'</p>';
+  if(ip)ip.innerHTML='<p class="pos">'+msg+'</p>';
+  document.getElementById('upFile').value='';
+}
+function importCSV(){openUpload();}
+/* =============== END UPLOAD v2 =============== */
 
 const EMBEDDED_TEAM_JOSH_BRAND={
   name:'TEAM JOSH PROSPECT MONITORING',
@@ -1578,7 +1783,7 @@ const DEFAULT_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz5b6ys
 const Cloud = {
   token: localStorage.getItem(K.token) || '',
   get base(){ return (localStorage.getItem(K.url)||DEFAULT_APPS_SCRIPT_URL).trim(); },
-  call(action, data={}) {
+  call(action, data={}, timeoutMs=12000) {
     return new Promise((resolve, reject) => {
       if(!this.base) return reject(new Error('Google Apps Script Web App URL is not configured.'));
       const callback = '__jp_cb_' + Date.now() + '_' + Math.random().toString(36).slice(2);
@@ -1593,7 +1798,7 @@ const Cloud = {
       const timer = setTimeout(() => {
         cleanup();
         reject(new Error('Cloud request timed out. Check the Apps Script URL and deployment access.'));
-      }, 12000);
+      }, timeoutMs);
       function cleanup(){
         clearTimeout(timer);
         delete window[callback];
@@ -1877,80 +2082,7 @@ testUrl = async function(){
   }catch(e){un.textContent=e.message}
 };
 
-importCSV = async function(){
-  const f=file.files[0];
-  if(!f)return alert('Choose CSV.');
-  const reader=new FileReader();
-
-  reader.onload=async()=>{
-    try{
-      ip.innerHTML='<p class="muted">Reading CSV...</p>';
-      const lines=String(reader.result||'').split(/\r?\n/).filter(x=>x.trim());
-      if(lines.length<2)throw new Error('CSV has no prospect rows.');
-
-      const parseLine=line=>{
-        const values=[];
-        let current='',quoted=false;
-        for(let i=0;i<line.length;i++){
-          const ch=line[i];
-          if(ch==='"'){
-            if(quoted&&line[i+1]==='"'){current+='"';i++}
-            else quoted=!quoted;
-          }else if(ch===','&&!quoted){
-            values.push(current.trim());current='';
-          }else current+=ch;
-        }
-        values.push(current.trim());
-        return values;
-      };
-
-      const headers=parseLine(lines.shift()).map(x=>x.trim());
-      const rows=[];
-
-      for(const line of lines){
-        const values=parseLine(line);
-        const o=Object.fromEntries(headers.map((key,i)=>[key,values[i]||'']));
-        const name=o['Client Name']||o['Name'];
-        if(!name)continue;
-
-        rows.push({
-          name:name.trim(),
-          mobile:o['Mobile']||o['Mobile Number']||'',
-          email:o['Email']||'',
-          link:o['Link']||o['Social Link']||'',
-          occ:o['Occupation']||'',
-          source:o['Source']||'Other',
-          status:o['Status']||'Approach',
-          plan:o['Plan']||'',
-          ape:Number(o['APE']||o['Estimated APE']||0)||0,
-          remarks:o['Remarks']||''
-        });
-      }
-
-      if(!rows.length)throw new Error('No valid prospects found. Check the Client Name column.');
-
-      const chunkSize=8;
-      let imported=0;
-
-      for(let i=0;i<rows.length;i+=chunkSize){
-        const chunk=rows.slice(i,i+chunkSize);
-        ip.innerHTML='<p class="muted">Uploading '+Math.min(i+chunk.length,rows.length)+' of '+rows.length+'...</p>';
-        const result=await Cloud.call('importProspects',{rows:chunk});
-        imported+=Number(result.imported)||0;
-      }
-
-      await cloudReload();
-      render();
-      file.value='';
-      ip.innerHTML='<p class="pos">'+imported+' prospects imported successfully.</p>';
-    }catch(err){
-      ip.innerHTML='<p class="neg">'+err.message+'</p>';
-    }
-  };
-
-  reader.onerror=()=>ip.innerHTML='<p class="neg">Unable to read the CSV file.</p>';
-  reader.readAsText(f);
-};
+importCSV = function(){ openUpload(); };
 
 
 
